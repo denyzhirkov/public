@@ -1,6 +1,21 @@
 <!-- TITLE: Release History -->
 <!-- SUBTITLE: -->
 
+# 2022-06-10 Dev build 0.151.8
+
+## Latest Docker Images
+
+* Datagrok: 
+  *  `docker pull datagrok/datagrok:0.151.8`
+  *  `docker pull datagrok/datagrok:latest`
+  
+* [Docker-Compose](admin/docker-compose.md)
+
+## Addressed Issues
+
+* Closes #678: Memory consumption is constantly increasing if a view with filters panel is duplicated 
+
+
 # 2022-05-25 Dev build 0.151.8
 
 ## Latest Docker Images
