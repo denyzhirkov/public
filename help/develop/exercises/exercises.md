@@ -1,7 +1,7 @@
 <!-- TITLE: &#8204;Exercises -->
 <!-- SUBTITLE: -->
 
-# Exercises
+# Exercises: general info
 
 These programming exercises are designed to help developers get proficient with the Datagrok platform. The exercises are
 organized as progressive steps, with tasks of increasing complexity built on top of the previously completed steps.
