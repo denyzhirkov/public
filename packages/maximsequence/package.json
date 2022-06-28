@@ -1,0 +1,42 @@
+{
+	"name": "maximsequence",
+	"beta": true,
+	"friendlyName": "maximsequence",
+	"version": "0.0.1",
+	"description": "",
+	"dependencies": {
+		"datagrok-api": "latest",
+		"cash-dom": "latest",
+		"dayjs": "latest",
+		"@datagrok-libraries/utils": "latest"
+	},
+	"devDependencies": {
+		"webpack": "latest",
+		"webpack-cli": "latest",
+		"ts-loader": "latest",
+		"typescript": "latest",
+		"eslint": "latest",
+		"eslint-config-google": "latest",
+		"@typescript-eslint/eslint-plugin": "latest",
+		"@typescript-eslint/parser": "latest"
+	},
+	"scripts": {
+		"link-all": "",
+		"debug-maximsequence": "webpack && grok publish ",
+		"release-maximsequence": "webpack && grok publish --release",
+		"build-maximsequence": "webpack",
+		"build": "webpack",
+		"debug-maximsequence-public": "grok publish public --rebuild",
+		"release-maximsequence-public": "grok publish public --rebuild --release",
+		"debug-maximsequence-local": "grok publish local --rebuild",
+		"release-maximsequence-local": "grok publish local --rebuild --release",
+		"lint": "eslint src --ext .ts",
+		"lint-fix": "eslint src --ext .ts --fix"
+	},
+	"canEdit": [
+		"Developers"
+	],
+	"canView": [
+		"All users"
+	]
+}
