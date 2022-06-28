@@ -1,3 +1,4 @@
+// exercise - Scripting with client functions
 //name: CountSubsequencePython
 //language: javascript
 //tags: template, demo

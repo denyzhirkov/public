@@ -1,3 +1,4 @@
+# exercise - Scripting with server functions
 #name: CountSubsequencePython
 #language: python
 #tags: template, demo

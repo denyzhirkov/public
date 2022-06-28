@@ -1,3 +1,4 @@
+# exercise - Creating a scripting viewer
 #name: Scatter Plot Python
 #language: python
 #tags: demo, viewers, hide-suggestions

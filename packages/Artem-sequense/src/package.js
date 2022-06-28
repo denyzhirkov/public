@@ -11,7 +11,7 @@ export const _package = new DG.Package();
 export function info() {
     grok.shell.info(_package.webRoot);
 }
-
+// exercise - Semantic types
 //name: complement
 //tags: panel, widgets
 //input: string nucleotides {semType: dna_nucleotide}
@@ -26,15 +26,23 @@ export function complement(nucleotides) {
     ]);
     let result = '';
     for (let i = 0; i < nucleotides.length; i++) {
-        let complementNucleotide = complement.get(nucleotides[i]);
+        // check if char uppercase nucleotides[i] 
+        let complementNucleotide = complement.get(nucleotides[i].toUpperCase());
         if (complementNucleotide) {
+            if (nucleotides[i] !== nucleotides[i].toUpperCase()) {
+                complementNucleotide = complementNucleotide.toLowerCase();
+            }
             result += complementNucleotide;
-        } else {
-            result += nucleotides[i];
         }
     }
     return new DG.Widget(ui.divText(result));
 }
+// exercise - Querying databases
+//name: getOrders
+//output: dataframe df
+export async function getOrders() {
+    return await grok.data.query(`ArtemSequence:ordersByCountry`, { country: 'USA'});
+  }
 
 //*helper method for fuzzyJoin
 function makeTable(str) {
@@ -124,9 +132,9 @@ function matchAllSequncesForSubstring(str, N, df, preCounted) {
 function addCountToDataFrame(df1, df2, N) {
     let preCounted = {};
     let counts = df1.columns.byName('Count');
-    if (counts == null) 
+    if (counts == null) {
         counts = df1.columns.addNew('Count', 'int');
-    
+    }
     let iteratorRow = 0;
     let column = df1.columns.bySemType('dna_nucleotide')
     let row1 = column.get(iteratorRow);
@@ -137,7 +145,7 @@ function addCountToDataFrame(df1, df2, N) {
         row1 = column.get(iteratorRow);
     }
 }
-
+// exercise - Custom cell renderers with 3-rd party js libraries
 //name: fuzzyJoin
 //input: dataframe df1
 //input: dataframe df2
@@ -158,10 +166,11 @@ class NucleotideBoxCellRenderer extends DG.GridCellRenderer {
     }
 
     render(g, x, y, w, h, gridCell, cellStyle) {
-        let seq = gridCell.cell.value;
+        const seq = gridCell.cell.value;
         const sl = new SmartLabel('id', true);
-        console.log(ce)
-        sl.setStyle(cellStyle);
+        sl.setStyle({
+            'font-size': '11px'
+        });
         let ctx = g.canvas.getContext("2d");
         ctx.font = '11px courier';
         ctx.fillStyle = "black";
@@ -172,7 +181,7 @@ class NucleotideBoxCellRenderer extends DG.GridCellRenderer {
             ctx.fillText(lines[i], x, y + (i * 11) + 11);
     }
 }
-
+// exercise - Custom cell renderers with 3-rd party js libraries
 //name: nucleotideBoxCellRenderer
 //tags: cellRenderer
 //meta.cellType: dna_nucleotide
@@ -181,18 +190,20 @@ export function nucleotideBoxCellRenderer() {
     return new NucleotideBoxCellRenderer();
 }
 
+// exercise - Accessing web services with OpenAPI
 //name: testENASwagger
 export async function testENASwagger() {
-    let data = await grok.data.query('ArtemSequense:PerformATextSearchAndDownloadDataInXMLFormat', {
+    const data = await grok.data.query('ArtemSequense:PerformATextSearchAndDownloadDataInXMLFormat', {
         'query': 'coronavirus',
         'result': 'assembly'
     });
     grok.shell.addTableView(data);
 }
 
+// Creating an info panel with a REST web service
 //name: enaSequence
 //tags: panel, widgets
-//input: string cellText {semType: dna_nucleotide}
+//input: string cellText
 //output: widget result
 //condition: isPotentialENAId(cellText)
 export async function enaSequence(cellText) {
@@ -205,6 +216,7 @@ export async function enaSequence(cellText) {
     return new DG.Widget(ui.box(ui.splitV([ui.div([IdUi]), sequenceUi])));
 }
 
+// Enhancing Datagrok with dialog-based functions
 async function _fetchENASequence(url) {
     const fasta = await (await grok.dapi.fetchProxy(url)).text();
     let sequences = [];
@@ -251,12 +263,12 @@ async function _fetchENASequence(url) {
 
 //name: formENADataTable
 export async function formENADataTable() {
-    let url = 'https://www.ebi.ac.uk/ena/browser/api/embl/textsearch?result=sequence&query=coronavirus&limit=10';
+    const url = 'https://www.ebi.ac.uk/ena/browser/api/embl/textsearch?result=sequence&query=coronavirus&limit=10';
     let df = await _fetchENASequence(url);
-    let grid = DG.Viewer.grid(df);
-    let limitInput = ui.intInput('How many rows: ', 100);
-    let queryInput = ui.stringInput('Query: ', 'coronavirus');
-    let button = ui.button('Preview');
+    const grid = DG.Viewer.grid(df);
+    const limitInput = ui.intInput('How many rows: ', 100);
+    const queryInput = ui.stringInput('Query: ', 'coronavirus');
+    const button = ui.button('Preview');
     ui.dialog('Create sequences table')
         .add(ui.splitV([
             ui.splitH([
@@ -270,11 +282,7 @@ export async function formENADataTable() {
             /* Handle table creation */
             // Display the resulting table
             url = `https://www.ebi.ac.uk/ena/browser/api/embl/textsearch?result=sequence&query=${queryInput.value}&limit=${limitInput.value}`;
-            let df = await _fetchENASequence(url);
-            console.log(limitInput);
-            console.log(queryInput);
-            console.log(url);
-
+            df = await _fetchENASequence(url);
             grok.shell.addTableView(df);
         })
         .show();
