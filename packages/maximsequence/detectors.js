@@ -10,7 +10,7 @@ class MaximsequencePackageDetectors extends DG.Package {
   //input: column col
   //output: string semType
   detectNucleotides(col) {
-    const nucleTypes = /[^ATCG]/ig;
+    const nucleTypes = /[^ATCG\s]/ig;
     if ( col.type != 'string' ) return null; //TODO: try to use COLUMN_TYPE.STRING;
     for ( let i = 0; i < col.categories.length; i++ ) {
       if ( col.categories[i].match(nucleTypes) != null ) return null;

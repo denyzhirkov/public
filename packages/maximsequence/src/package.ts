@@ -20,12 +20,13 @@ export function complement(nucleotides: string): object {
   let complementaryNucleotide: string = '';
   const preparedNucleotides: string = nucleotides.toUpperCase();
   let widgetStyle: ElementOptions = { };
-  const nucleTypes = /[^ATCG]/ig;
+  const nucleTypes = /[^ATCG\s]/ig;
   const nucleMap = new Map<string, string>();
   nucleMap.set('A', 'T');
   nucleMap.set('T', 'A');
   nucleMap.set('C', 'G');
   nucleMap.set('G', 'C');
+  nucleMap.set(' ', ' ');
 
   if ( preparedNucleotides.match(nucleTypes) === null ) {
     for (let i = 0; i<preparedNucleotides.length; i++ )
