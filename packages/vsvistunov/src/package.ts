@@ -11,7 +11,7 @@ export function info(): void {
 
 //name: complement
 //input: string nucleotides {semType: dna_nucleotide}
-//output: string result
+//output: string result {semType: dna_nucleotide}
 export function complement(nucleotides: string): string {
   const complement = new Map([
     ['A', 'T'],
