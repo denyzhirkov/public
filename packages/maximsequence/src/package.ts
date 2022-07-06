@@ -2,13 +2,205 @@
 import * as grok from 'datagrok-api/grok';
 import * as ui from 'datagrok-api/ui';
 import * as DG from 'datagrok-api/dg';
-import { Column, DataFrame } from 'datagrok-api/dg';
+import { Column, DataFrame, Widget } from 'datagrok-api/dg';
 ////import SmartLabel from 'fusioncharts-smartlabel/dist/fusioncharts-smartlabel';
 //import * as DG from 'node_modules/fusioncharts-smartlabel';
 //import { DataFrame } from 'datagrok-api/dg';
 //import {ElementOptions} from 'datagrok-api/src/const';  //we can import it from DG instead
 
 export const _package = new DG.Package();
+
+//Exercise 9: Enhancing Datagrok with dialog-based functions
+//name: fetchENASequence
+//input: string query
+//input: string limit
+//output: string result
+export async function _fetchENASequence(query: string, limit: string): Promise<string> {
+  const url = `https://www.ebi.ac.uk/ena/browser/api/embl/textsearch?result=sequence&query=${query}&limit=${limit}`;
+  //uploadDataFrame
+  const fetchresult = await (await grok.dapi.fetchProxy(url)).text();
+
+  return fetchresult;
+}
+
+//async function getAndParseENASequence(query: string, limit: string, df: DG.DataFrame, cutLength: number = 60) {
+async function getAndParseENASequence(query: string, limit: string, cutLength: number = 60): Promise<DG.DataFrame> {
+  const idList: string[] = [];
+  const sequencesList: string[] = [];
+  let strENAFile: string = '';
+  let strENARecord: string = '';
+  const idLength: number = 8; //length of ENA identificator
+  const indention: number = 5; //length of spaces for indention
+  let recordPos: number;
+  let signPos: number; // field signature position
+  let brPos: number; // '\n'  position
+  let strID: string;
+  let strSeq: string;
+
+  const pi = DG.TaskBarProgressIndicator.create('Obtaining and parsing ENASequence...');
+  //fetch for ENA sequence
+  try {
+    const enaResult = await _fetchENASequence(query, limit);
+    //enaResult.then((value) => {strENAFile = value});
+    strENAFile = enaResult;
+
+    //parsing ENA sequence
+    //TODO put parsing in separate function if we need to expand parser functionality
+    let eof: boolean = false;
+    while (!eof) {
+      recordPos = strENAFile.search('//');
+      strID = '';
+      strSeq = '';
+      if (recordPos === -1) eof = true;
+      else {
+        strENARecord = strENAFile.slice(0, recordPos);
+        strENAFile = strENAFile.slice(recordPos + 2);
+
+        signPos = strENARecord.search('AC   ');
+        if (signPos >= 0) strID = strENARecord.slice(signPos + indention, signPos + indention + idLength);
+
+        signPos = strENARecord.search('SQ   ');
+        if (signPos >= 0) {
+          strENARecord = strENARecord.slice(signPos);
+          brPos = strENARecord.search('\n');
+          if (brPos >= 0) strSeq = strENARecord.slice((brPos+1) + indention, brPos + indention + cutLength);
+          //TODO if we want to extract more than 60 symbols - we should upgrade code to put aside numbers and indetions
+        } //extracting ENA sequencs
+        if ((strID !== '') && (strSeq !== '')) {
+          idList.push(strID);
+          sequencesList.push(strSeq);
+        }
+      } //record processing
+    } //while (!eof)
+  } catch (e: any) {
+    grok.shell.error(e.toString()); //TODO Q: is it correct type-casting for using in shell.error?
+  } finally { //TODO Q: in case of multiple using should we eliminate previously created data frames (df)?
+    let df: DG.DataFrame | null = null;
+    try {
+      df = DG.DataFrame.fromColumns([
+        DG.Column.fromList(DG.COLUMN_TYPE.STRING, 'ID', idList),
+        DG.Column.fromList(DG.COLUMN_TYPE.STRING, 'Sequence', sequencesList)
+      ]);
+    } finally {
+      if (df === null) df = DG.DataFrame.create(8);
+      pi.close();
+    }
+    return df;
+  }
+
+}
+
+function onPreviewBtnClick() {
+//  getAndParseENASequence('coronavirus', '10');
+}
+
+//name: formENADataTable
+export async function formENADataTable() {
+  let dfPreview: DG.DataFrame = DG.DataFrame.create(8);
+  const previewGrid = DG.Viewer.grid(dfPreview, {'width': '350px', 'border': 'solid 1px red'});
+  const limitInput = ui.intInput('', 100);
+  const queryInput = ui.stringInput('', 'coronavirus');
+//  const button = ui.button('Preview..', onPreviewBtnClick);
+  const button = ui.button('Preview..', async ()=>{
+    //await getAndParseENASequence('coronavirus', '10', dfPreview);
+    if (queryInput.value == '') grok.shell.warning('Warning: Specify query!');
+    else {
+      ui.setUpdateIndicator(previewGrid.root, true);
+      dfPreview = await getAndParseENASequence(queryInput.value, '5');
+      previewGrid.dataFrame = dfPreview;
+      ui.setUpdateIndicator(previewGrid.root, false);
+    }
+  });
+
+  limitInput.root.setAttribute('size', '5');
+  limitInput.root.setAttribute('placeholder', 'How many rows');
+  limitInput.setTooltip('Specify max rows of data to load');
+  queryInput.root.setAttribute('placeholder', 'Query');
+  queryInput.setTooltip('Specify query to load');
+
+  let htmlStyle: DG.ElementOptions = { };
+  //htmlStyle = {style: {'width': '330px', 'border': 'solid 1px darkgray'}};
+
+  const panelGrid = ui.div([previewGrid], htmlStyle);
+
+  htmlStyle = {style: {'width': '150px', 'border': 'none 1px darkgray', 'min-width': '150px',
+    'display': 'flex', 'justify-content': 'flex-start', 'flex-flow': 'column wrap'}};
+  const panelProp = ui.div([
+    queryInput.root,
+    limitInput,
+    button], htmlStyle);
+
+  htmlStyle = {style: {'width': '100%', 'height': '100%', 'border': 'solid 1px darkgray'}};
+  ui.dialog('Create sequences table')
+    .add(ui.splitH([
+      panelProp,
+      panelGrid
+    ], htmlStyle, true))
+    .onOK(async (event: any) => {
+      let query = '';
+      let limVal = 0;
+      if ((limitInput.value == 0) || (limitInput.value === null)) {
+        grok.shell.warning('Warning: Specify number of rows!');
+        if (event.preventDefault != null) event.preventDefault();
+        return;
+      }
+      if (limitInput.value != null) limVal = limitInput.value;
+      if (queryInput.value == '') {
+        grok.shell.warning('Warning: Specify query!');
+        if (event.preventDefault != null) event.preventDefault();
+        return;
+      }
+      query = queryInput.value;
+
+      let df = await getAndParseENASequence(query, limVal.toString());
+      previewGrid.dataFrame = dfPreview;
+      grok.shell.addTableView(df);
+    })
+    .show({width: 550, height: 410}); //showModal()
+
+}
+
+//EXCERCISE 8: Creating an info panel with a REST web service
+//name: ENA Sequence (maxim)
+//tags: panel, widgets
+//input: string cellText
+//output: widget result
+//condition: true
+export async function enaSequence(cellText: string): Promise<DG.Widget | null> {
+//isPotentialENAId(cellText)
+  const url = `https://www.ebi.ac.uk/ena/browser/api/fasta/${cellText}`;
+  const fasta = await (await grok.dapi.fetchProxy(url)).text();
+
+  if (fasta.length === 0) return null;
+
+  let widgetStyle: DG.ElementOptions = { };
+  const headerEndPos = fasta.search(/\n/); //TODO: check is '\n' enough or we need to searsh for '\r' too
+  const headerText: string = fasta.slice(0, headerEndPos);
+  const boxHeader = ui.divText(headerText);
+  const fastaText: string = fasta.slice(headerEndPos);
+//  widgetStyle = {style: {'color': '#F55', 'width': '100%', 'border': 'solid 1px darkgray'}};
+//  widgetStyle = {style: {'color': '#F55', 'flex-direction': 'col', 'width': '75%', 'border': 'solid 1px darkgray'}};
+  const contentInput: DG.InputBase<string> = ui.textInput('', fastaText);
+  contentInput.input.setAttribute('cols', '20');
+  contentInput.input.setAttribute('rows', '10');
+  const fastaContent = ui.inputs([contentInput]);
+
+  const boxContent = ui.splitV([
+    boxHeader,
+    fastaContent
+  ], null, true);
+
+  widgetStyle = {style: {'color': 'black', 'height': '350px', 'border': 'solid 2px black'}};
+  //const widgetbox = ui.box(boxContent);
+  const widgetbox = ui.box(boxContent, widgetStyle);
+
+  const view = grok.shell.newView('Test view');
+  view.box = true;
+  view.append(widgetbox);
+
+
+  return new DG.Widget(widgetbox);
+}
 
 //EXCERCISE 7
 //name: testENASwagger
