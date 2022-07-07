@@ -203,7 +203,7 @@ export async function testENASwagger() {
 // Creating an info panel with a REST web service
 //name: enaSequence
 //tags: panel, widgets
-//input: string cellText
+//input: string cellText {semType: dna_nucleotide}
 //output: widget result
 //condition: isPotentialENAId(cellText)
 export async function enaSequence(cellText) {
