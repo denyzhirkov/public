@@ -3,7 +3,10 @@ import * as grok from 'datagrok-api/grok';
 import * as ui from 'datagrok-api/ui';
 import * as DG from 'datagrok-api/dg';
 import { Column, DataFrame, Widget } from 'datagrok-api/dg';
-////import SmartLabel from 'fusioncharts-smartlabel/dist/fusioncharts-smartlabel';
+//import SmartLabel from 'fusioncharts-smartlabel';
+//SmartLabelManager = require('fusioncharts-smartlabel');
+
+
 //import * as DG from 'node_modules/fusioncharts-smartlabel';
 //import { DataFrame } from 'datagrok-api/dg';
 //import {ElementOptions} from 'datagrok-api/src/const';  //we can import it from DG instead
@@ -85,13 +88,14 @@ async function getAndParseENASequence(query: string, limit: string, cutLength: n
       if (df === null) df = DG.DataFrame.create(8);
       pi.close();
     }
+    df.name = `ENASequence(${query}, ${limit})`;
     return df;
   }
-
 }
 
 function onPreviewBtnClick() {
 //  getAndParseENASequence('coronavirus', '10');
+//TODO Q: should we put code of => function here?
 }
 
 //name: formENADataTable
@@ -102,15 +106,15 @@ export async function formENADataTable() {
   const queryInput = ui.stringInput('', 'coronavirus');
 //  const button = ui.button('Preview..', onPreviewBtnClick);
   const button = ui.button('Preview..', async ()=>{
-    //await getAndParseENASequence('coronavirus', '10', dfPreview);
+    //await getAndParseENASequence('coronavirus', '10', dfPreview); //TODO Q: do we need pass existed df or create new?
     if (queryInput.value == '') grok.shell.warning('Warning: Specify query!');
     else {
       ui.setUpdateIndicator(previewGrid.root, true);
-      dfPreview = await getAndParseENASequence(queryInput.value, '5');
+      dfPreview = await getAndParseENASequence(queryInput.value, '10');
       previewGrid.dataFrame = dfPreview;
       ui.setUpdateIndicator(previewGrid.root, false);
     }
-  });
+  }); //preview button on click
 
   limitInput.root.setAttribute('size', '5');
   limitInput.root.setAttribute('placeholder', 'How many rows');
@@ -163,7 +167,7 @@ export async function formENADataTable() {
 //EXCERCISE 8: Creating an info panel with a REST web service
 //name: ENA Sequence (maxim)
 //tags: panel, widgets
-//input: string cellText
+//input: string cellText {semType: ena_ID}
 //output: widget result
 //condition: true
 export async function enaSequence(cellText: string): Promise<DG.Widget | null> {
@@ -194,10 +198,9 @@ export async function enaSequence(cellText: string): Promise<DG.Widget | null> {
   //const widgetbox = ui.box(boxContent);
   const widgetbox = ui.box(boxContent, widgetStyle);
 
-  const view = grok.shell.newView('Test view');
-  view.box = true;
-  view.append(widgetbox);
-
+  // const view = grok.shell.newView('Test view');
+  // view.box = true;
+  // view.append(widgetbox);
 
   return new DG.Widget(widgetbox);
 }
@@ -224,20 +227,17 @@ class SmartLabel {
   public set value(v : number) {
     this.fontsize = v;
   }
-
   constructor(id?: string, elipsable?: boolean) {
     this.stringsArr = [];
     if (typeof elipsable === 'boolean') this.addEllipses = elipsable;
   }
-
   //textToLines(strsrc: string, w: number, h: number, fontsize: number, needdash: boolean = false): Array<string> {
-  getSmartText(strsrc: string, w: number, h: number, needdash: boolean = false): Array<string> {
-    const symbwidth: number = this.fontsize/1.2;
-    const symbheight: number = this.fontsize*1.2;
+  getSmartText(strsrc: string, w: number, h: number, needdots: boolean = false): Array<string> {
+    const symbwidth: number = this.fontsize/1.75;
+    const symbheight: number = this.fontsize*1.0;
     const symbinrow: number = Math.round(w/symbwidth);
     const numofrows: number = Math.round(h/symbheight);
     let strs = strsrc;
-
     let brakeIndex: number = strs.length;
     let eostr: boolean = false;
 
@@ -260,9 +260,9 @@ class SmartLabel {
       }
       if (this.stringsArr.length >= numofrows) {
         strs = this.stringsArr[this.stringsArr.length-1];
-        if ((strs.length >= symbinrow) && (strs.length > 4))
+        if ((strs.length >= symbinrow) && (strs.length > 4) && (needdots))
           strs = strs.slice(0, strs.length-4);
-        strs = strs.concat('...');
+        if (needdots) strs = strs.concat('...');
         this.stringsArr[this.stringsArr.length-1] = strs;
         eostr = true;
       }
@@ -282,12 +282,11 @@ class NucleotideBoxCellRenderer extends DG.GridCellRenderer {
   ) {
     const seq = gridCell.cell.value;
     const sl = new SmartLabel('id', true);
-    /*sl.setStyle({
-      'font-size': '10px',
-      'font-family': 'courier'});
-
-    const labelObj = SmartLabel.textToLines(sl.getSmartText(seq, w, h));
-    */
+    // sl.setStyle({
+    //   'font-size': '10px',
+    //   'font-family': 'courier'});
+    // const labelObj = SmartLabel.textToLines(sl.getSmartText(seq, w, h));
+    
     sl.fontsize = 12;
     const labelObj = sl.getSmartText(seq, w, h);
 
@@ -300,13 +299,11 @@ class NucleotideBoxCellRenderer extends DG.GridCellRenderer {
       //g.fillText(seq, x+1, y+1);
 
       for (let i = 0; i < labelObj.length; i++)
-        ctx.fillText(labelObj[i], x+1, y+1+i*sl.fontsize);
+        ctx.fillText(labelObj[i], x+3, y-h+3+(i*(sl.fontsize/1.5)));
 
-      g.fillStyle = 'red';
-      ctx.rect(x, y, x+10, y+12);
       // const lines = labelObj.lines;
       // for (let i = 0; i < lines.length; i++)
-      //   ctx.fillText(labelObj, x+1, y+1);
+      //   ctx.fillText(lines[i], x+1, y+1);
     } else grok.shell.info('ctx == null');
   }
 
