@@ -7,10 +7,6 @@ import { Column, DataFrame, Widget } from 'datagrok-api/dg';
 //SmartLabelManager = require('fusioncharts-smartlabel');
 
 
-//import * as DG from 'node_modules/fusioncharts-smartlabel';
-//import { DataFrame } from 'datagrok-api/dg';
-//import {ElementOptions} from 'datagrok-api/src/const';  //we can import it from DG instead
-
 export const _package = new DG.Package();
 
 //Exercise 9: Enhancing Datagrok with dialog-based functions
@@ -20,9 +16,7 @@ export const _package = new DG.Package();
 //output: string result
 export async function _fetchENASequence(query: string, limit: string): Promise<string> {
   const url = `https://www.ebi.ac.uk/ena/browser/api/embl/textsearch?result=sequence&query=${query}&limit=${limit}`;
-  //uploadDataFrame
   const fetchresult = await (await grok.dapi.fetchProxy(url)).text();
-
   return fetchresult;
 }
 
@@ -124,34 +118,39 @@ export async function formENADataTable() {
 
   let htmlStyle: DG.ElementOptions = { };
   //htmlStyle = {style: {'width': '330px', 'border': 'solid 1px darkgray'}};
+  htmlStyle = {style: {'margin-left': '5px', 'padding-right': '5px'}};
 
   const panelGrid = ui.div([previewGrid], htmlStyle);
 
-  htmlStyle = {style: {'width': '150px', 'border': 'none 1px darkgray', 'min-width': '150px',
-    'display': 'flex', 'justify-content': 'flex-start', 'flex-flow': 'column wrap'}};
-  const panelProp = ui.div([
+  // htmlStyle = {style: {'width': '150px', 'border': 'none 1px darkgray', 'min-width': '150px',
+  //   'display': 'flex', 'justify-content': 'flex-start', 'flex-flow': 'column wrap', 'margin-left': '10px'}};
+  htmlStyle = {style: {'width': '200px', 'border-right': 'solid 1px darkgray', 'min-width': '150px',
+    'margin-right': '10px', 'padding-right': '2px'}};
+  const panelProp = ui.divV([
     queryInput.root,
     limitInput,
     button], htmlStyle);
 
   htmlStyle = {style: {'width': '100%', 'height': '100%', 'border': 'solid 1px darkgray'}};
   ui.dialog('Create sequences table')
-    .add(ui.splitH([
+    .add(ui.divH([
       panelProp,
       panelGrid
-    ], htmlStyle, true))
+    ], htmlStyle))
     .onOK(async (event: any) => {
       let query = '';
       let limVal = 0;
       if ((limitInput.value == 0) || (limitInput.value === null)) {
         grok.shell.warning('Warning: Specify number of rows!');
-        if (event.preventDefault != null) event.preventDefault();
+        if (event)
+          if (event.preventDefault != null) event.preventDefault();
         return;
       }
       if (limitInput.value != null) limVal = limitInput.value;
       if (queryInput.value == '') {
         grok.shell.warning('Warning: Specify query!');
-        if (event.preventDefault != null) event.preventDefault();
+        if (event)
+          if (event.preventDefault != null) event.preventDefault();
         return;
       }
       query = queryInput.value;
@@ -160,8 +159,7 @@ export async function formENADataTable() {
       previewGrid.dataFrame = dfPreview;
       grok.shell.addTableView(df);
     })
-    .show({width: 550, height: 410}); //showModal()
-
+    .show({x: 200, y: 200, width: 600, height: 410}); //showModal()
 }
 
 //EXCERCISE 8: Creating an info panel with a REST web service
@@ -169,23 +167,23 @@ export async function formENADataTable() {
 //tags: panel, widgets
 //input: string cellText {semType: ena_ID}
 //output: widget result
-//condition: true
+//condition: isPotentialENAId(cellText)
 export async function enaSequence(cellText: string): Promise<DG.Widget | null> {
-//isPotentialENAId(cellText)
   const url = `https://www.ebi.ac.uk/ena/browser/api/fasta/${cellText}`;
   const fasta = await (await grok.dapi.fetchProxy(url)).text();
 
   if (fasta.length === 0) return null;
 
   let widgetStyle: DG.ElementOptions = { };
-  const headerEndPos = fasta.search(/\n/); //TODO: check is '\n' enough or we need to searsh for '\r' too
+  const headerEndPos = fasta.search(/\n/); //TODO: check is '\n' enough or we need to search for '\r' too
   const headerText: string = fasta.slice(0, headerEndPos);
+  const fastaText: string = fasta.slice(headerEndPos+1);
+
   const boxHeader = ui.divText(headerText);
-  const fastaText: string = fasta.slice(headerEndPos);
 //  widgetStyle = {style: {'color': '#F55', 'width': '100%', 'border': 'solid 1px darkgray'}};
 //  widgetStyle = {style: {'color': '#F55', 'flex-direction': 'col', 'width': '75%', 'border': 'solid 1px darkgray'}};
   const contentInput: DG.InputBase<string> = ui.textInput('', fastaText);
-  contentInput.input.setAttribute('cols', '20');
+  contentInput.input.setAttribute('cols', '15');
   contentInput.input.setAttribute('rows', '10');
   const fastaContent = ui.inputs([contentInput]);
 
@@ -195,12 +193,7 @@ export async function enaSequence(cellText: string): Promise<DG.Widget | null> {
   ], null, true);
 
   widgetStyle = {style: {'color': 'black', 'height': '350px', 'border': 'solid 2px black'}};
-  //const widgetbox = ui.box(boxContent);
   const widgetbox = ui.box(boxContent, widgetStyle);
-
-  // const view = grok.shell.newView('Test view');
-  // view.box = true;
-  // view.append(widgetbox);
 
   return new DG.Widget(widgetbox);
 }
@@ -214,6 +207,8 @@ export async function testENASwagger() {
 }
 
 //EXCERCISE 6
+//SmartLabel stub class while we have an issue with library uploading
+//class SmartLabelStub {
 class SmartLabel {
   stringsArr: string[];
   addEllipses: boolean = false;
@@ -231,10 +226,15 @@ class SmartLabel {
     this.stringsArr = [];
     if (typeof elipsable === 'boolean') this.addEllipses = elipsable;
   }
+
+  //setStyle(fontsize: string, fontfamily?: string|null) {
+  // setStyle({'font-size': any, 'font-family': string}) {
+  // }
+
   //textToLines(strsrc: string, w: number, h: number, fontsize: number, needdash: boolean = false): Array<string> {
-  getSmartText(strsrc: string, w: number, h: number, needdots: boolean = false): Array<string> {
+  getSmartText(strsrc: string, w: number, h: number, needdots: boolean = true): Array<string> {
     const symbwidth: number = this.fontsize/1.75;
-    const symbheight: number = this.fontsize*1.0;
+    const symbheight: number = this.fontsize*1.2;
     const symbinrow: number = Math.round(w/symbwidth);
     const numofrows: number = Math.round(h/symbheight);
     let strs = strsrc;
@@ -250,24 +250,25 @@ class SmartLabel {
         }
       }
       if (brakeIndex > symbinrow) brakeIndex = symbinrow;
+      if (brakeIndex > strs.length) brakeIndex = strs.length;
 
       this.stringsArr.push(strs.slice(0, brakeIndex));
       if (brakeIndex+1 <= strs.length) strs = strs.substring(brakeIndex+1);
       else eostr = true;
-      if (strs.length <= symbinrow) {
-        this.stringsArr.push(strs);
-        eostr = true;
-      }
+      // if (strs.length <= symbinrow) {
+      //   this.stringsArr.push(strs);
+      //   eostr = true;
+      // }
       if (this.stringsArr.length >= numofrows) {
         strs = this.stringsArr[this.stringsArr.length-1];
-        if ((strs.length >= symbinrow) && (strs.length > 4) && (needdots))
+        if ((strs.length >= symbinrow) && (strs.length > 4) && (needdots)) {
           strs = strs.slice(0, strs.length-4);
-        if (needdots) strs = strs.concat('...');
+          strs = strs.concat('...');
+        }
         this.stringsArr[this.stringsArr.length-1] = strs;
         eostr = true;
       }
     }
-
     return this.stringsArr;
   }
 }
@@ -286,8 +287,8 @@ class NucleotideBoxCellRenderer extends DG.GridCellRenderer {
     //   'font-size': '10px',
     //   'font-family': 'courier'});
     // const labelObj = SmartLabel.textToLines(sl.getSmartText(seq, w, h));
-    
-    sl.fontsize = 12;
+
+    sl.fontsize = 10;
     const labelObj = sl.getSmartText(seq, w, h);
 
     const ctx = g.canvas.getContext('2d');
@@ -298,8 +299,12 @@ class NucleotideBoxCellRenderer extends DG.GridCellRenderer {
       //ctx.clearRect(x, y, w, h);
       //g.fillText(seq, x+1, y+1);
 
+      let yindent = labelObj.length;
+      yindent = Math.round(h / (labelObj.length+1));
+      //if (labelObj.length > 0) yindent = h/labelObj.length;
+
       for (let i = 0; i < labelObj.length; i++)
-        ctx.fillText(labelObj[i], x+3, y-h+3+(i*(sl.fontsize/1.5)));
+        ctx.fillText(labelObj[i], x+3, y+3+yindent+(i*yindent)); //y-h+3+(i*(labelObj.length/1.5))
 
       // const lines = labelObj.lines;
       // for (let i = 0; i < lines.length; i++)
@@ -381,6 +386,13 @@ function columnSubsecCounter(col: Column, strSearchSequenceVocab: string, N: num
   return subsecCnt;
 }
 
+//EXCERCISE 3
+//name: getOrders
+//output: dataframe df
+export async function getOrders(queryName: string) {
+  return await grok.data.query(`${getpackagename()}:${queryName}`, {country: 'USA'});
+}
+
 //EXCERCISE 1
 //name: complement
 //tags: panel, widgets
@@ -413,4 +425,9 @@ export function complement(nucleotides: string): DG.Widget {
 //name: info
 export function info() {
   grok.shell.info('Maximsequence info: ' + _package.webRoot);
+}
+
+//name: getpackagename
+export function getpackagename() {
+  return 'Maximsequence';
 }
