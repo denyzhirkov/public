@@ -38,10 +38,9 @@ async function getAndParseENASequence(query: string, limit: string, cutLength: n
   //fetch for ENA sequence
   try {
     const enaResult = await _fetchENASequence(query, limit);
-    //enaResult.then((value) => {strENAFile = value});
     strENAFile = enaResult;
 
-    //parsing ENA sequence
+    //parsing ENA sequences file
     //TODO put parsing in separate function if we need to expand parser functionality
     let eof: boolean = false;
     while (!eof) {
@@ -100,7 +99,6 @@ export async function formENADataTable() {
   const queryInput = ui.stringInput('', 'coronavirus');
 //  const button = ui.button('Preview..', onPreviewBtnClick);
   const button = ui.button('Preview..', async ()=>{
-    //await getAndParseENASequence('coronavirus', '10', dfPreview); //TODO Q: do we need pass existed df or create new?
     if (queryInput.value == '') grok.shell.warning('Warning: Specify query!');
     else {
       ui.setUpdateIndicator(previewGrid.root, true);
@@ -156,7 +154,6 @@ export async function formENADataTable() {
       query = queryInput.value;
 
       let df = await getAndParseENASequence(query, limVal.toString());
-      previewGrid.dataFrame = dfPreview;
       grok.shell.addTableView(df);
     })
     .show({x: 200, y: 200, width: 600, height: 410}); //showModal()
@@ -231,7 +228,6 @@ class SmartLabel {
   // setStyle({'font-size': any, 'font-family': string}) {
   // }
 
-  //textToLines(strsrc: string, w: number, h: number, fontsize: number, needdash: boolean = false): Array<string> {
   getSmartText(strsrc: string, w: number, h: number, needdots: boolean = true): Array<string> {
     const symbwidth: number = this.fontsize/1.75;
     const symbheight: number = this.fontsize*1.2;
@@ -255,10 +251,7 @@ class SmartLabel {
       this.stringsArr.push(strs.slice(0, brakeIndex));
       if (brakeIndex+1 <= strs.length) strs = strs.substring(brakeIndex+1);
       else eostr = true;
-      // if (strs.length <= symbinrow) {
-      //   this.stringsArr.push(strs);
-      //   eostr = true;
-      // }
+
       if (this.stringsArr.length >= numofrows) {
         strs = this.stringsArr[this.stringsArr.length-1];
         if ((strs.length >= symbinrow) && (strs.length > 4) && (needdots)) {
@@ -294,17 +287,13 @@ class NucleotideBoxCellRenderer extends DG.GridCellRenderer {
     const ctx = g.canvas.getContext('2d');
     if (ctx != null) {
       g.fillStyle = 'black';
-      //ctx.fillRect(x+1, y+1, w-1, h-1);
       g.font = '12px arial';
-      //ctx.clearRect(x, y, w, h);
-      //g.fillText(seq, x+1, y+1);
 
       let yindent = labelObj.length;
       yindent = Math.round(h / (labelObj.length+1));
-      //if (labelObj.length > 0) yindent = h/labelObj.length;
 
       for (let i = 0; i < labelObj.length; i++)
-        ctx.fillText(labelObj[i], x+3, y+3+yindent+(i*yindent)); //y-h+3+(i*(labelObj.length/1.5))
+        ctx.fillText(labelObj[i], x+3, y+3+yindent+(i*yindent));
 
       // const lines = labelObj.lines;
       // for (let i = 0; i < lines.length; i++)
@@ -327,7 +316,8 @@ export function nucleotideBoxCellRenderer() {
 //input: dataframe df1
 //input: dataframe df2
 //input: int N
-export function fuzzyJoin(df1: DataFrame, df2: DataFrame, N: number): void {
+//output: dataframe df
+export function fuzzyJoin(df1: DataFrame, df2: DataFrame, N: number): DataFrame | null {
   const semTypeName = 'dna_nucleotide';
   const col1 = df1.columns.bySemType(semTypeName); //let col1: Column<any>;
   const col2 = df2.columns.bySemType(semTypeName); //let col2: Column<any>;
@@ -337,8 +327,8 @@ export function fuzzyJoin(df1: DataFrame, df2: DataFrame, N: number): void {
   let subsecCnt: number = 0;
 
   if (!col1 || !col2) {
-    grok.shell.error('At least one table does not have '+ semTypeName + ' column');
-    return;
+    grok.shell.error('At least one table does not have '+ semTypeName + ' column!');
+    return null;
   }
 
   const timeStart = Date.now(); //performance measurement
@@ -351,19 +341,20 @@ export function fuzzyJoin(df1: DataFrame, df2: DataFrame, N: number): void {
   for (let i = 0; i < rowFromCount; i++) {
     strSearchSequenceVocab = col1.get(i);
     subsecCnt = columnSubsecCounter(col2, strSearchSequenceVocab, N);
-    colCount.set(rowToCount+i, subsecCnt); //TODO should we add notify?
-  } //<first column processing
+    colCount.set(rowToCount+i, subsecCnt); //TODO Q: should we add notify?
+  } //<first table processing
   rowFromCount = col2.length;
   rowToCount = col1.length;
   for (let i = 0; i < rowFromCount; i++) {
     strSearchSequenceVocab = col2.get(i);
     subsecCnt = columnSubsecCounter(col1, strSearchSequenceVocab, N);
-    colCount.set(rowToCount+i, subsecCnt); //notify
-  } //<second column processing
+    colCount.set(rowToCount+i, subsecCnt);
+  } //<second table processing
   const timeEnd = Date.now(); //performance measurement
   console.log('maximsequence:fuzzyJoin Execution time (ms): ' + (timeEnd-timeStart)); //performance logging
 
-  grok.shell.addTableView(df);
+  //grok.shell.addTableView(df);
+  return df;
 }
 
 function columnSubsecCounter(col: Column, strSearchSequenceVocab: string, N: number): number {
@@ -393,16 +384,13 @@ export async function getOrders(queryName: string) {
   return await grok.data.query(`${getpackagename()}:${queryName}`, {country: 'USA'});
 }
 
-//EXCERCISE 1
 //name: complement
-//tags: panel, widgets
 //input: string nucleotides {semType: dna_nucleotide}
-//output: widget result
+//output: string result {semType: dna_nucleotide}
 //condition: true
-export function complement(nucleotides: string): DG.Widget {
+export function complement(nucleotides: string, testMode: boolean = true): string {
   let complementaryNucleotide: string = '';
   const preparedNucleotides: string = nucleotides.toUpperCase();
-  let widgetStyle: DG.ElementOptions = { };
   const nucleTypes = /[^ATCG\s]/ig;
   const nucleMap = new Map<string, string>();
   nucleMap.set('A', 'T');
@@ -416,8 +404,22 @@ export function complement(nucleotides: string): DG.Widget {
       complementaryNucleotide += nucleMap.get(preparedNucleotides[i]);
   } else {
     complementaryNucleotide = 'Non complementary value'; //nucleotides;
-    widgetStyle = {style: {'color': '#F55'}};
   }
+
+  return complementaryNucleotide;
+}
+
+//name: complementWidget
+//tags: panel, widgets
+//input: string nucleotides {semType: dna_nucleotide}
+//output: widget result
+//condition:  detectNucleotides(col) == 'dna_nucleotide'
+export function complementWidget(nucleotides: string): DG.Widget {
+  const complementaryNucleotide: string = complement(nucleotides);
+  let widgetStyle: DG.ElementOptions = { };
+  if (complementaryNucleotide === 'Non complementary value')
+    widgetStyle = {style: {'color': '#F55'}};
+
   return new DG.Widget(ui.divText(complementaryNucleotide, widgetStyle));
 }
 

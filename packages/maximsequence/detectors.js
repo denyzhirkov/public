@@ -23,9 +23,8 @@ class MaximsequencePackageDetectors extends DG.Package {
   //output: bool result
   isPotentialENAId(str) {
     // returns true, if name is of the form [A-Z]{2}[0-9]{6}
-    //const nucleTypes = /[A-Z]{2}[0-9]{6}/i;
-    const nucleTypes = /[A-Z][A-Z][0-9][0-9][0-9][0-9][0-9][0-9]/i;
-    alert(str);
+    //const nucleTypes = /[A-Z]{2}[0-9]{6}/i;   //TODO: doesn't work properly
+    const nucleTypes = /[A-Z][A-Z][0-9][0-9][0-9][0-9][0-9][0-9]/i; //TODO: doesn't work properly
     return (str.match(nucleTypes) != null) ? true : false;
   }
 }
