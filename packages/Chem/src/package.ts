@@ -564,7 +564,7 @@ export function detectSmiles(col: DG.Column, min: number) {
     }
   }
 
-  if (DG.Detector.sampleCategories(col, isSmiles, min, 10, 0.8)) {
+  if (col.categories.some(cat => cat.length >= 1) && DG.Detector.sampleCategories(col, isSmiles, min, 10, 0.8)) {
     col.tags[DG.TAGS.UNITS] = DG.UNITS.Molecule.SMILES;
     col.semType = SEMTYPE.MOLECULE;
   }

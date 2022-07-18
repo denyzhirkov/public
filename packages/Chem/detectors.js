@@ -38,7 +38,7 @@ class ChemPackageDetectors extends DG.Package {
   //input: column col
   //output: string semType
   detectMolecules(col) {
-    if (DG.Detector.sampleCategories(col, (s) => s.includes('M  END'), 1)) {
+    if (col.categories.some(cat => cat.length >= 1) && DG.Detector.sampleCategories(col, (s) => s.includes('M  END'), 1)) {
       col.tags[DG.TAGS.UNITS] = DG.UNITS.Molecule.MOLBLOCK;
       return DG.SEMTYPE.MOLECULE;
     }
@@ -56,7 +56,7 @@ class ChemPackageDetectors extends DG.Package {
       return null;
     }
 
-    if (DG.Detector.sampleCategories(col, ChemPackageDetectors.likelyValidSmiles, minUnique, 10, 0.8))
+    if (col.categories.some(cat => cat.length >= 1) && DG.Detector.sampleCategories(col, ChemPackageDetectors.likelyValidSmiles, minUnique, 10, 0.8))
       grok.functions.call('Chem:detectSmiles', { col: col, min: minUnique }).then(() => {});
   }
 }
