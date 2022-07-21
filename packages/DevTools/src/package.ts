@@ -9,6 +9,7 @@ import * as tests from "./tests/test-examples";
 import {testManagerView, _renderTestManagerPanel} from "./package-testing";
 import { functionSignatureEditor } from './function-signature-editor';
 import { addToJSContextCommand, getMinifiedClassNameMap, _renderDevPanel } from './dev-panel';
+import { testManagerView1 } from './package-testing-1';
 
 export const _package = new DG.Package();
 let minifiedClassNameMap = {};
@@ -81,4 +82,12 @@ export function _IconTool(): void {
 export async function testManager(): Promise<void> {
   c = grok.functions.getCurrentCall(); 
   await testManagerView(); 
+}
+
+//name: TestManagerNew
+//top-menu: Tools | Dev | Test Manager New
+//tags: app
+export async function testManagerNew(): Promise<void> {
+  c = grok.functions.getCurrentCall(); 
+  await testManagerView1(); 
 }
