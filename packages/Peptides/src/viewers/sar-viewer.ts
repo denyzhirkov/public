@@ -39,6 +39,16 @@ export class SARViewerBase extends DG.JsViewer {
     // this.model.init(this.dataFrame);
     this.helpUrl = '/help/domains/bio/peptides.md';
     // await this.requestDataUpdate();
+
+    this.initProperties();
+  }
+
+  initProperties() {
+    const props = this.model.usedProperties;
+    IS_PROPERTY_CHANGING = true;
+    for (const [propName, propVal] of Object.entries(props))
+      this.props.set(propName, propVal as any as object);
+    IS_PROPERTY_CHANGING = false;
   }
 
   detach(): void {this.subs.forEach((sub) => sub.unsubscribe());}
@@ -55,12 +65,12 @@ export class SARViewerBase extends DG.JsViewer {
     this.viewerGrid?.invalidate();
   }
 
-  async requestDataUpdate(): Promise<void> {
-    await this.model.updateData(this.scaling, this.sourceGrid, this.bidirectionalAnalysis,
-      this.minActivityDelta, this.maxSubstitutions, this.showSubstitution);
-  }
+  // async requestDataUpdate(): Promise<void> {
+  //   await this.model.updateData(this.scaling, this.sourceGrid, this.bidirectionalAnalysis,
+  //     this.minActivityDelta, this.maxSubstitutions, this.showSubstitution);
+  // }
 
-  async onPropertyChanged(property: DG.Property): Promise<void> {
+  onPropertyChanged(property: DG.Property): void {
     super.onPropertyChanged(property);
     this.dataFrame.tags[property.name] = `${property.get(this)}`;
     if (!this.initialized || IS_PROPERTY_CHANGING)
@@ -70,7 +80,6 @@ export class SARViewerBase extends DG.JsViewer {
 
     if (propName === 'scaling' && typeof this.dataFrame !== 'undefined') {
       const activityCol = this.dataFrame.columns.bySemType(C.SEM_TYPES.ACTIVITY)!;
-      // const minActivity = this.dataFrame.getCol(C.COLUMNS_NAMES.ACTIVITY).stats.min;
       const minActivity = activityCol.stats.min;
       if (minActivity && minActivity <= 0 && this.scaling !== 'none') {
         grok.shell.warning(`Could not apply ${this.scaling}: ` +
@@ -83,7 +92,8 @@ export class SARViewerBase extends DG.JsViewer {
     if (!this.showSubstitution && ['maxSubstitutions', 'activityLimit'].includes(propName))
       return;
 
-    await this.requestDataUpdate();
+    // await this.requestDataUpdate();
+    this.model.updateDefault();
     this.render(true);
   }
 }
@@ -101,8 +111,7 @@ export class SARViewer extends SARViewerBase {
 
   async onTableAttached(): Promise<void> {
     await super.onTableAttached();
-    this.viewerGrid = this.model._sarGrid;
-    this.model.sarViewer = this;
+    this.model.sarViewer ??= this;
     // this.dataFrame.temp['sarViewer'] = this;
 
     this.subs.push(this.model.onSARGridChanged.subscribe((data) => {
@@ -110,6 +119,8 @@ export class SARViewer extends SARViewerBase {
       this.render();
     }));
 
+    this.model.updateDefault(true);
+    this.viewerGrid = this.model._sarGrid;
     this.initialized = true;
     this.render();
   }
@@ -117,11 +128,11 @@ export class SARViewer extends SARViewerBase {
   isInitialized(): DG.Grid {return this.model?._sarGrid;}
 
   //1. debouncing in rxjs; 2. flags?
-  async onPropertyChanged(property: DG.Property): Promise<void> {
+  onPropertyChanged(property: DG.Property): void {
     if (!this.isInitialized() || IS_PROPERTY_CHANGING)
       return;
 
-    await super.onPropertyChanged(property);
+    super.onPropertyChanged(property);
     IS_PROPERTY_CHANGING = true;
     this.model.syncProperties(true);
     IS_PROPERTY_CHANGING = false;
@@ -141,13 +152,15 @@ export class SARViewerVertical extends SARViewerBase {
 
   async onTableAttached(): Promise<void> {
     await super.onTableAttached();
-    this.viewerGrid = this.model._sarVGrid;
-    this.model.sarViewerVertical = this;
+    this.model.sarViewerVertical ??= this;
 
     this.subs.push(this.model.onSARVGridChanged.subscribe((data) => {
       this.viewerGrid = data;
       this.render();
     }));
+    
+    this.model.updateDefault(true);
+    this.viewerGrid = this.model._sarVGrid;
 
     this.initialized = true;
     this.render();
@@ -155,11 +168,11 @@ export class SARViewerVertical extends SARViewerBase {
 
   isInitialized(): DG.Grid {return this.model?._sarVGrid;}
 
-  async onPropertyChanged(property: DG.Property): Promise<void> {
+  onPropertyChanged(property: DG.Property): void {
     if (!this.isInitialized() || IS_PROPERTY_CHANGING)
       return;
 
-    await super.onPropertyChanged(property);
+    super.onPropertyChanged(property);
     IS_PROPERTY_CHANGING = true;
     this.model.syncProperties(false);
     IS_PROPERTY_CHANGING = false;

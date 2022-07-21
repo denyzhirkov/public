@@ -23,14 +23,15 @@ class BioPackageDetectors extends DG.Package {
   static RnaFastaAlphabet = new Set(['A', 'C', 'G', 'U']);
 
   static SmilesRawAlphabet = new Set([
-    'O', 'C', 'c', 'N', 'S', 'F', '(', ')',
-    '1', '2', '3', '4', '5', '6', '7',
+    'B', 'C', 'c', 'E', 'H', 'L', 'M', 'N', 'O', 'S', 'F', '(', ')',
+    '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
     '+', '-', '@', '[', ']', '/', '\\', '#', '=']);
 
   /** @param s {String} - string to check
    * @returns {boolean} */
   static isHelm(s) {
-    return s.startsWith('PEPTIDE1{') || s.startsWith('RNA1{') || s.startsWith('CHEM1{') || s.startsWith('BLOB1{');
+    return s.startsWith('PEPTIDE1{') || s.startsWith('CHEM1{') || s.startsWith('BLOB1{') ||
+      s.startsWith('RNA1{') || s.startsWith('DNA1{');
   }
 
   //tags: semTypeDetector
@@ -54,11 +55,25 @@ class BioPackageDetectors extends DG.Package {
       ['RNA', BioPackageDetectors.RnaFastaAlphabet],
     ];
 
+    // Check for url column, maybe it is too heavy check
+    const isUrlCheck = (s) => {
+      let res = true;
+      try {
+        const url = new URL(s);
+        res = true;
+      } catch {
+        res = false;
+      }
+      return res;
+    };
+    const isUrl = DG.Detector.sampleCategories(col, isUrlCheck, 1);
+    if (isUrl) return null;
+
     // TODO: Detect HELM sequence
     // TODO: Lazy calculations could be helpful for performance and convenient for expressing classification logic.
     const statsAsChars = BioPackageDetectors.getStats(col, 5, BioPackageDetectors.splitterAsChars);
 
-    const decoy = BioPackageDetectors.detectAlphabet(statsAsChars.freq, decoyAlphabets, null, 0.5);
+    const decoy = BioPackageDetectors.detectAlphabet(statsAsChars.freq, decoyAlphabets, null, 0.35);
     if (decoy != 'UN') return null;
 
     if (statsAsChars.sameLength) {
@@ -110,10 +125,10 @@ class BioPackageDetectors extends DG.Package {
     // !!! What is the difference between the gap symbol and separator symbol in stats terms?
     // const noSeparatorRe = /[a-z\d]+$/i;
     const noSeparatorChemRe = /[HBCNOFPSKVYI]/i; // Mendeleev's periodic table single char elements
-    const noSeparatorAlphaDigitRe = /[\dA-Z]/i;
+    const noSeparatorAlphaDigitRe = /[\dA-Z,& _]/i; // ..., comma, ampersand, space, underscore
     const noSeparatorBracketsRe = /[\[\]()<>{}]/i;
     const cleanFreq = Object.assign({}, ...Object.entries(freq)
-      .filter(([m, f]) => m != ' ' && m != '_' &&
+      .filter(([m, f]) =>
         !noSeparatorChemRe.test(m) && !noSeparatorAlphaDigitRe.test(m) && !noSeparatorBracketsRe.test(m) &&
         !BioPackageDetectors.PeptideFastaAlphabet.has(m) &&
         !BioPackageDetectors.DnaFastaAlphabet.has(m))
@@ -198,7 +213,7 @@ class BioPackageDetectors extends DG.Package {
     const alphabetA = [];
     for (const m of keys) {
       freqA.push(m in freq ? freq[m] : 0);
-      alphabetA.push(alphabet.has(m) ? 1 : 0);
+      alphabetA.push(alphabet.has(m) ? 10 : -10 /* penalty for character outside alphabet set*/);
     }
     /* There were a few ideas: chi-squared, pearson correlation (variance?), scalar product */
     const cos = BioPackageDetectors.vectorDotProduct(freqA, alphabetA) / (BioPackageDetectors.vectorLength(freqA) * BioPackageDetectors.vectorLength(alphabetA));

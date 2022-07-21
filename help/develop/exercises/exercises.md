@@ -52,6 +52,10 @@ predictive models, integration with the external utilities, data augmentation, a
 ## Setting up the environment
 
 *Prerequisites:* basic TypeScript or JavaScript knowledge.
+*Useful links:*
+
+* [Datagrok tools](https://www.npmjs.com/package/datagrok-tools)
+* [Naming conventions](https://datagrok.ai/help/develop/develop#naming-conventions)
 
 1. Install the necessary tools (Node.js, npm, webpack, datagrok-tools) following
    [these instructions](../how-to/set-up-environment.md)
@@ -64,8 +68,9 @@ predictive models, integration with the external utilities, data augmentation, a
    `<yourFirstName>-sequence` using datagrok-tools:
    `grok create <yourFirstName>-sequence` with specifying the `--ts` option to create a package with TypeScript
    configuration
-   (if you are new to TypeScript, you can specify the `--js` option); Note that detectors.js file is still using
-   JavaScript
+   (if you are new to TypeScript, you can specify the `--js` option);
+   Note that detectors.js file should be in JavaScript anyway.
+   Also you can add `--eslint` option to add eslint checker feature to the package
 5. Run `npm install` to link the dependencies mentioned in `package.json` file of your package
 6. Upload it to the server: run `webpack` and `grok publish dev` (see other
    options [here](../develop.md#deployment-modes))
@@ -160,11 +165,23 @@ You will learn: how to write semantic type detectors, how to develop context-spe
    ![exercises-semantic-tooltip](exercises-semantic-tooltip.png)
    Alternatively, you can find this information if you click on the column and expand the 'Details' pane in the property
    panel on the right.
-7. Now transform the previously created `complement` function into an [info panel](../how-to/add-info-panel.md):
-   tag it with `panel` and `widgets` tags and change the output type to `widget` (see an example [here][014]). This will
-   instruct the platform to use the `complement` function for providing additional information for string values of
-   the `dna_nucleotide` semantic type. To test it, simply open our test file, click on any cell in the `sequence`
-   column, and find the `complement` property in the panel on the right as it is shown on screenshot:
+7. Now let’s put the result of the previously created `complement` function into an [info panel](../how-to/add-info-panel.md):
+   Create function `complementWidget` and add special comments block to allow Datagrok system recognise it and upload
+   properly (see an example [here][014]).
+
+   ```javascript
+    //name: complementWidget
+    //tags: panel, widgets
+    //input: string nucleotides {semType: dna_nucleotide}
+    //output: widget result
+    //condition: true
+   ```
+
+   The `panel` and `widgets` tags and output type `widget` allows Datagrok to determine how the result of
+   `complementWidget` function will appear in the system. Listed above block of comments will
+   instruct the platform to use the `complementWidget` function for providing additional information for string values 
+   of the `dna_nucleotide` semantic type. To test it, simply open our test file, click on any cell in the `sequence`
+   column, and find the `complementWidget` property in the panel on the right as it is shown on screenshot:
    ![exercises-complement-data-panel](exercises-complement-data-panel.png)
 
 ## Exercise 2: Scripting and functions
@@ -617,7 +634,7 @@ First, let's explore how scripting viewer works.
    ![exercises-transforming-dataframes](exercises-transforming-dataframes.png)
 6. Read more about joining dataframes through the case reviewed at our
    [Community Forum](https://community.datagrok.ai/t/table-to-table-augmentation/493/4), and with
-   [a sample](https://public.datagrok.ai/js/samples/data-frame/join-tables).
+   [a sample](https://public.datagrok.ai/js/samples/data-frame/join-link/join-tables).
 
 <!--- TODO: add linked dataframes demo here --->
 
@@ -763,7 +780,7 @@ contained in a currently selected grid cell.
    ```javascript
     //name: ENA Sequence
     //tags: panel, widgets
-    //input: string cellText
+    //input: string cellText {semType: ENA}
     //output: widget result
     //condition: isPotentialENAId(cellText)
     export async function enaSequence(cellText) {

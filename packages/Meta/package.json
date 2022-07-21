@@ -1,6 +1,6 @@
 {
   "name": "@datagrok/meta",
-  "version": "1.1.14",
+  "version": "1.1.21",
   "description": "Meta information for @datagrok scope",
   "repository": {
     "type": "git",
@@ -918,6 +918,9 @@
         },
         "1.0.0": {
           "datagrok-api": "^1.4.11"
+        },
+        "1.0.1": {
+          "datagrok-api": "^1.4.11"
         }
       },
       "description": "Charts package provides visualizations built using\\nthe [ECharts](https://echarts.apache.org/en/index.html) library.",
@@ -938,6 +941,9 @@
         },
         "0.0.5": {
           "datagrok-api": "^0.94.10"
+        },
+        "0.0.6": {
+          "datagrok-api": "^1.0.0"
         }
       },
       "description": "BioSignals is a package for the [Datagrok](https://datagrok.ai) platfrom. The goal of the project is to offer an efficient and automated biosignal processing routine.",
@@ -946,14 +952,15 @@
         "url": "https://github.com/datagrok-ai/public.git",
         "directory": "packages/BioSignals"
       },
-      "category": "Bioinformatics"
+      "category": "Digital Health"
     },
     "dsp": {
       "dependencies": {
         "0.0.3": {
           "datagrok-api": ">0.94.10"
         },
-        "0.0.5": {}
+        "0.0.5": {},
+        "0.0.6": {}
       },
       "description": "A pack of various digital signal processing tools",
       "repository": {
@@ -961,7 +968,7 @@
         "url": "https://github.com/datagrok-ai/public.git",
         "directory": "packages/DSP"
       },
-      "category": "Bioinformatics"
+      "category": "Digital Health"
     },
     "chembl-browser": {
       "dependencies": {
@@ -1255,6 +1262,15 @@
         },
         "1.7.7": {
           "datagrok-api": "^1.4.12"
+        },
+        "1.7.8": {
+          "datagrok-api": "^1.4.12"
+        },
+        "1.7.9": {
+          "datagrok-api": "^1.4.12"
+        },
+        "1.7.11": {
+          "datagrok-api": "^1.4.12"
         }
       },
       "description": "Bio is a [package](https://datagrok.ai/help/develop/develop#packages) for the [Datagrok](https://datagrok.ai) platform",
@@ -1324,7 +1340,8 @@
         },
         "0.1.1": {
           "datagrok-api": "^0.151.6"
-        }
+        },
+        "0.1.2": {}
       },
       "description": "Web-based 3D molecular graphics. Supports the following file formats: .PDB, .CIF, SDF, MOL",
       "repository": {
@@ -1403,7 +1420,8 @@
         },
         "0.1.1": {
           "datagrok-api": "^0.151.6"
-        }
+        },
+        "1.0.0": {}
       },
       "description": "Interactive map with a number of extensions that uses Leaflet.js",
       "repository": {
@@ -1437,7 +1455,8 @@
         },
         "0.1.1": {
           "datagrok-api": "^0.151.6"
-        }
+        },
+        "0.1.2": {}
       },
       "description": "Pedometer for accelerometer signals",
       "repository": {
@@ -1445,7 +1464,7 @@
         "url": "https://github.com/datagrok-ai/public.git",
         "directory": "packages/Pedometer"
       },
-      "category": "Development"
+      "category": "Digital Health"
     },
     "cli": {
       "dependencies": {
@@ -1575,6 +1594,9 @@
           "datagrok-api": "^1.4.12"
         },
         "1.2.3": {
+          "datagrok-api": "^1.4.12"
+        },
+        "1.2.5": {
           "datagrok-api": "^1.4.12"
         }
       },

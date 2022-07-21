@@ -114,6 +114,9 @@ MWRSWY-CKHP
     testSmilesCsv = 'testSmilesCsv',
     testSmiles2Csv = 'testSmiles2Csv',
     testCerealCsv = 'testCerealCsv',
+    testActivityCliffsCsv = 'testActivityCliffsCsv',
+    testSpgi100 = 'testSpgi100',
+    testUnichemSources = 'testUnichemSources',
   }
 
   const samples: { [key: string]: string } = {
@@ -129,7 +132,10 @@ MWRSWY-CKHP
     'testIdCsv': 'System:AppData/Bio/tests/testId.csv',
     'testSmilesCsv': 'System:AppData/Bio/tests/testSmiles.csv',
     'testSmiles2Csv': 'System:AppData/Bio/tests/testSmiles2.csv',
+    'testActivityCliffsCsv': 'System:AppData/Bio/tests/testActivityCliffs.csv', // smiles
     'testCerealCsv': 'System:AppData/Bio/tests/testCereal.csv',
+    'testSpgi100': 'System:AppData/Bio/tests/testSpgi100.csv',
+    'testUnichemSources': 'System:AppData/Bio/tests/testUnichemSources.csv',
   };
 
   const _samplesDfs: { [key: string]: Promise<DG.DataFrame> } = {};
@@ -139,7 +145,7 @@ MWRSWY-CKHP
       if (!(key in _samplesDfs)) {
         _samplesDfs[key] = (async (): Promise<DG.DataFrame> => {
           const df: DG.DataFrame = await readFile(samples[key]);
-          await grok.data.detectSemanticTypes(df);
+          // await grok.data.detectSemanticTypes(df);
           return df;
         })();
       }
@@ -305,26 +311,59 @@ MWRSWY-CKHP
     await _testNeg(readSamples(Samples.testSmiles2Csv), 'SMILES');
   });
 
+  test('samplesTestActivityCliffsNegativeSmiles', async () => {
+    await _testNeg(readSamples(Samples.testActivityCliffsCsv), 'smiles');
+  });
+
   test('samplesFastaPtPosSequence', async () => {
-    await (_testPos(readSamples(Samples.fastaPtCsv), 'sequence', 'fasta:SEQ:PT'));
+    await _testPos(readSamples(Samples.fastaPtCsv), 'sequence', 'fasta:SEQ:PT');
   });
 
   test('samplesTestCerealNegativeCerealName', async () => {
-    await (_testNeg(readSamples(Samples.testCerealCsv), 'cereal_name'));
+    await _testNeg(readSamples(Samples.testCerealCsv), 'cereal_name');
+  });
+
+  test('samplesTestSpgi100NegativeStereoCategory', async () => {
+    await _testNeg(readSamples(Samples.testSpgi100), 'Stereo Category');
+  });
+  test('samplesTestSpgi100NegativeScaffoldNames', async () => {
+    await _testNeg(readSamples(Samples.testSpgi100), 'Scaffold Names');
+  });
+  test('samplesTestSpgi100NegativePrimaryScaffoldName', async () => {
+    await _testNeg(readSamples(Samples.testSpgi100), 'Primary Scaffold Name');
+  });
+
+  test('samplesTestUnichemSourcesNegativeSrcUrl', async () => {
+    await _testNeg(readSamples(Samples.testUnichemSources), 'src_url');
+  });
+  test('samplesTestUnichemSourcesNegativeBaseIdUrl', async () => {
+    await _testNeg(readSamples(Samples.testUnichemSources), 'base_id_url');
   });
 });
 
 export async function _testNeg(readDf: DfReaderFunc, colName: string) {
   const df: DG.DataFrame = await readDf();
-
   const col: DG.Column = df.col(colName)!;
-  expect(col.semType === DG.SEMTYPE.MACROMOLECULE, false);
+  const semType: string = await grok.functions.call('Bio:detectMacromolecule', {col: col});
+  if (semType)
+    col.semType = semType;
+
+  if (col.semType === DG.SEMTYPE.MACROMOLECULE) {
+    const msg = `Negative test detected semType='${col.semType}', units='${col.getTag(DG.TAGS.UNITS)}'.`;
+    throw new Error(msg);
+    // col.semType = '';
+    // col.setTag(DG.TAGS.UNITS, '');
+    // col.setTag('separator', '');
+  }
 }
 
 export async function _testPos(readDf: DfReaderFunc, colName: string, units: string, separator: string | null = null) {
   const df: DG.DataFrame = await readDf();
-
   const col: DG.Column = df.col(colName)!;
+  const semType: string = await grok.functions.call('Bio:detectMacromolecule', {col: col});
+  if (semType)
+    col.semType = semType;
+
   expect(col.semType === DG.SEMTYPE.MACROMOLECULE, true);
   expect(col.getTag(DG.TAGS.UNITS), units);
   if (separator)
