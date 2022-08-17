@@ -1,17 +1,53 @@
 {
-  "name": "@datagrok/chemspace",
-  "version": "0.2.1",
-  "fullName": "Chemspace",
-  "description": "Chemspace API demo",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/datagrok-ai/public.git",
-    "directory": "packages/Chemspace"
+	"name": "@datagrok/chemspace",
+	"version": "0.3.2",
+	"author": {
+    "name": "Maksym Shvyrlo",
+    "email": "mshvyrlo@datagrok.ai"
   },
-  "sources": [
-    "css/chemspace.css"
-  ],
-  "canEdit": [ "Developers" ],
-  "canView": [ "All users" ],
-	"category": "Cheminformatics"
+  "fullName": "Chemspace",
+  "description": "Chemspace store API wrapper for https://chem-space.com/",
+	"beta": false,
+	"friendlyName": "Chemspace store",
+	"category": "Cheminformatics",
+	"dependencies": {
+		"datagrok-api": "latest",
+		"cash-dom": "latest",
+		"dayjs": "latest",
+		"@datagrok-libraries/utils": "latest"
+	},
+	"devDependencies": {
+		"webpack": "latest",
+		"webpack-cli": "latest",
+		"ts-loader": "latest",
+		"typescript": "latest",
+		"eslint": "latest",
+		"eslint-config-google": "latest",
+		"@typescript-eslint/eslint-plugin": "latest",
+		"@typescript-eslint/parser": "latest"
+	},
+	"scripts": {
+		"link-all": "",
+		"debug-chemspace": "webpack && grok publish ",
+		"release-chemspace": "webpack && grok publish --release",
+		"build-chemspace": "webpack",
+		"build": "webpack",
+		"debug-chemspace-public": "grok publish public --rebuild",
+		"release-chemspace-public": "grok publish public --rebuild --release",
+		"debug-chemspace-local": "grok publish local --rebuild",
+		"release-chemspace-local": "grok publish local --rebuild --release",
+		"lint": "eslint src --ext .ts",
+		"lint-fix": "eslint src --ext .ts --fix"
+	},
+	"canEdit": [
+		"Developers"
+	],
+	"canView": [
+		"All users"
+	],
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/datagrok-ai/public.git",
+		"directory": "packages/Chemspace"
+	}
 }
