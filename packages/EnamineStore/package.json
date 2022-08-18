@@ -1,17 +1,53 @@
 {
-  "name": "@datagrok/enamine-store",
-  "version": "0.2.1",
-  "fullName": "Enamine Store",
-  "description": "Enamine Store API demo",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/datagrok-ai/public.git",
-    "directory": "packages/EnamineStore"
+	"name": "@datagrok/enamine-store",
+	"version": "0.3.1",
+	"author": {
+    "name": "Maksym Shvyrlo",
+    "email": "mshvyrlo@datagrok.ai"
   },
-  "sources": [
-    "css/enamine_store.css"
-  ],
-  "canEdit": [ "Developers" ],
-  "canView": [ "All users" ],
-	"category": "Cheminformatics"
+	"category": "Cheminformatics",
+	"beta": true,
+	"fullName": "Enamine Store",
+	"friendlyName": "EnamineStore",
+	"description": "Enamine Store API wrapper for https://www.enaminestore.com/",
+	"dependencies": {
+		"datagrok-api": "latest",
+		"cash-dom": "latest",
+		"dayjs": "latest",
+		"@datagrok-libraries/utils": "latest"
+	},
+	"devDependencies": {
+		"webpack": "latest",
+		"webpack-cli": "latest",
+		"ts-loader": "latest",
+		"typescript": "latest",
+		"eslint": "latest",
+		"eslint-config-google": "latest",
+		"@typescript-eslint/eslint-plugin": "latest",
+		"@typescript-eslint/parser": "latest"
+	},
+	"scripts": {
+		"link-all": "",
+		"debug-enaminestore": "webpack && grok publish ",
+		"release-enaminestore": "webpack && grok publish --release",
+		"build-enaminestore": "webpack",
+		"build": "webpack",
+		"debug-enaminestore-public": "grok publish public --rebuild",
+		"release-enaminestore-public": "grok publish public --rebuild --release",
+		"debug-enaminestore-local": "grok publish local --rebuild",
+		"release-enaminestore-local": "grok publish local --rebuild --release",
+		"lint": "eslint src --ext .ts",
+		"lint-fix": "eslint src --ext .ts --fix"
+	},
+	"canEdit": [
+		"Developers"
+	],
+	"canView": [
+		"All users"
+	],
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/datagrok-ai/public.git",
+		"directory": "packages/EnamineStore"
+	}
 }
