@@ -15,7 +15,7 @@ function getSettings(gc: DG.GridColumn): SparklineSettings {
     ...getSettingsBase(gc),
     ...{globalScale: false},
     ...{minDistance: 5},
-    ...{colorCode: false},
+    ...{colorCode: true},
   };
 }
 

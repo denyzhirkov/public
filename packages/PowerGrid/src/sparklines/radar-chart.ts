@@ -83,28 +83,27 @@ export class RadarChartCellRender extends DG.GridCellRenderer {
     for (let i = 0; i < cols.length; i++) {
       if (!cols[i].isNone(row)) {
         const point = p(i, 1);
-        DG.Paint.marker(g, DG.MARKER_TYPE.CIRCLE, point.x, point.y, DG.Color.blue, 1);
+        DG.Paint.marker(g, DG.MARKER_TYPE.CIRCLE, point.x, point.y, DG.Color.lightGray, 1);
       }
     }
 
-    // axes
-    for (let i = 0; i < cols.length; i++)
-      g.line(box.midX, box.midY, p(i, 1).x, p(i, 1).y, DG.Color.lightGray);
-
-
-    // Grid
-
-    for (let i = 1; i <= 4; i++) {
-      g.setStrokeStyle(DG.Color.toRgb(DG.Color.lightGray))
-        .polygon(it.range(cols.length).map((col) => p(col, i / 4)))
-        .stroke();
-    }
 
     const path = it.range(cols.length)
       .map((i) => p(i, !cols[i].isNone(row) ? cols[i].scale(row) : 0));
-    g.setFillStyle('#c0ffc0')
+    g.setFillStyle('#00cdff')
       .polygon(path)
       .fill();
+
+    // axes
+    for (let i = 0; i < cols.length; i++)
+      g.line(box.midX, box.midY, p(i, 1).x, p(i, 1).y, DG.Color.gray);
+
+    // Grid
+    for (let i = 1; i <= 4; i++) {
+      g.setStrokeStyle('#dcdcdc')
+        .polygon(it.range(cols.length).map((col) => p(col, i / 4)))
+        .stroke();
+    }
   }
 
   renderSettings(gc: DG.GridColumn): Element {

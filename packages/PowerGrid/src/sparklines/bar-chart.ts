@@ -14,7 +14,7 @@ function getSettings(gc: DG.GridColumn): BarChartSettings {
   return gc.settings ??= {
     ...getSettingsBase(gc),
     ...{minH: 0.05},
-    ...{colorCode: false},
+    ...{colorCode: true},
     // ...{normalize: true},
   };
 }
