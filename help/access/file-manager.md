@@ -18,15 +18,15 @@ file management features and data science capabilities:
 
 Learn how to:
 
-* [Load a file from:](#load-overview)
+* [Load a file from:](#load-a-file)
   * [Local host](#from-local-host)
   * [Remote file storage:](#from-remote-file-storage)
   * [**Home** folder or other accessible folder in Datagrok](#from-home-folder)
 * [Keep data up to date](#refresh-a-file)
 * [Share a file as:](#share)
-  * [Data table](#sharing-a-data-table)
-  * [File](#sharing-a-file)
-* [Upload processed data](#upload)
+  * [Data table](#share-a-data-table)
+  * [File](#share-a-file)
+* [Upload processed data](#upload-a-project)
 
 <!--See useful features:
 
