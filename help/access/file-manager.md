@@ -31,7 +31,7 @@ Datagrok provides access to anything that is machine-readable:
 * Scripts and functions
 
 The file manager connects the Datagrok persistent file storage and can easily
-create new connections to access any file from within Datagrok storage:
+create new connections to access any file from other data storage:
 
 * Dropbox
 * Files
