@@ -61,9 +61,9 @@ file manager: the **Cell Imaging Segmentation** script makes segmentation and
 counts the number of cells in the image.
 
 Such scripts are convenient for data science teams that actively work with
-files. Now you can analyze data right where it is stored. All you need is to
-write an executable script in any programming language and connect it to the
-Datagrok platform.
+files. Now you can analyze data through the Datagrok file manager right where it
+is stored. All you need is to write an executable script in any programming
+language and connect it to the Datagrok platform.
 
 File manager is associated with a workspace that provides interactive data
 processing dashboards.
