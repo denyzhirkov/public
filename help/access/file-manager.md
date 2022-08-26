@@ -68,7 +68,7 @@ language and connect it to the Datagrok platform.
 File manager is associated with a workspace that provides interactive data
 processing dashboards.
 
-## Learn how to
+<!--## Learn how to
 
 * [Load a file from:](#load-a-file)
   * [Local host](#from-local-host)
@@ -80,11 +80,11 @@ processing dashboards.
   * [File](#share-a-file)
 * [Upload processed data](#upload-a-project)
 
-<!--See useful features:
+See useful features:
 
 * [Dashboard](#dashboard)
 * [Clinical case](#clinical-data)
-* [Scripts](#scripts)-->
+* [Scripts](#scripts)
 
 ## Load a file
 
@@ -137,16 +137,6 @@ because, in this case, Datagrok doesn't create an actual connection.
 To refresh the file in the left side panel, select icon >**File** > **REFRESH**.
 
 ![Refresh](Files-uploading-refresh.png)
-
-<!--## Working with data features
-
-### Clinical data
-
-### Scripts
-
-### Dashboard
-
-Once you upload the file, the platform recognizes the data and offers tools for data processing-->
 
 ## Share
 
@@ -214,4 +204,4 @@ When turning on **Data sync**, data reloads when a user opens the project.
 
 After saving the project, you can set user previleges to the project.
 
-<!--![Upload the project](./File-manager-upload-the-project.gif)-->
+![Upload the project](File-manager- upload-the-project.gif)-->
