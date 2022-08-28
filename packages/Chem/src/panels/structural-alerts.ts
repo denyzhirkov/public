@@ -3,7 +3,7 @@ import * as ui from 'datagrok-api/ui';
 import * as grok from 'datagrok-api/grok';
 import * as DG from 'datagrok-api/dg';
 import {getRdKitModule, getRdKitWebRoot} from '../utils/chem-common-rdkit';
-import {RDModule, RDMol} from '../rdkit-api';
+import {RDModule, RDMol, SubstructLibrary} from '../rdkit-api';
 
 export async function checkForStructuralAlerts(col: DG.Column<string>): Promise<void> {
   const df = col.dataFrame;
@@ -38,26 +38,33 @@ export async function checkForStructuralAlerts(col: DG.Column<string>): Promise<
 export function runStructuralAlertsDetection(df: DG.DataFrame, ruleSetList: string[], col: DG.Column<string>,
   ruleSetCol: DG.Column<string>, ruleIdCol: DG.Column<string>, smartsMap: Map<string, RDMol>,
   rdkitModule: RDModule): DG.DataFrame {
-  ruleSetList.forEach((ruleSetName) => df.columns.addNewBool(ruleSetName))
-  const skipRuleSetList: string[] = [];
+  ruleSetList.forEach((ruleSetName) => df.columns.addNewBool(ruleSetName));
   const originalDfLength = df.rowCount;
   const alertsDfLength = ruleSetCol.length;
-  
-  for (let i = 0; i < originalDfLength; i++) {
-    const mol = rdkitModule.get_mol(col.get(i)!);
 
-    for (let j = 0; j < alertsDfLength; j++) {
-      const currentRuleSet = ruleSetCol.get(j)!;
-      if (!ruleSetList.includes(currentRuleSet) || skipRuleSetList.includes(currentRuleSet))
-        continue;
+  //@ts-ignore:
+  const lib: SubstructLibrary = new rdkitModule.SubstructLibrary();
+  const indexMap: Map<number, number> = new Map();
 
-      const matches = mol.get_substruct_match(smartsMap.get(ruleIdCol.get(j)!)!);
-      if (matches != '{}') {
-        skipRuleSetList.push(currentRuleSet);
-        df.set(currentRuleSet, i, true);
-      }
+  for (let i = 0; i < originalDfLength; i++)
+    indexMap.set(lib.add_mol(rdkitModule.get_mol(col.get(i)!)), i);
+
+  let matches: number[];
+  for (let i = 0; i < alertsDfLength; i++) {
+    const currentRuleSet = ruleSetCol.get(i)!;
+    if (!ruleSetList.includes(currentRuleSet))
+      continue;
+
+    try {
+      matches = JSON.parse(lib.get_matches(smartsMap.get(ruleIdCol.get(i)!)!));
+    } catch (e) {
+      console.warn(`StructuralAlertsError: ${e}`);
+      continue;
     }
-    skipRuleSetList.length = 0;
+
+    const currentRuleSetCol: DG.Column<boolean> = df.getCol(currentRuleSet);
+    for (const libIndex of matches)
+      currentRuleSetCol.set(indexMap.get(libIndex)!, true);
   }
 
   return df;

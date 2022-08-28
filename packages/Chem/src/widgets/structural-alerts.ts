@@ -4,7 +4,7 @@ import * as grok from 'datagrok-api/grok';
 import * as DG from 'datagrok-api/dg';
 // The file is imported from a WebWorker. Don't use Datagrok imports
 import {getRdKitModule, drawMoleculeToCanvas, getRdKitWebRoot} from '../utils/chem-common-rdkit';
-import {RDMol} from '../rdkit-api';
+import {RDMol, SubstructLibrary} from '../rdkit-api';
 
 let alertsDf: DG.DataFrame | null = null;
 const _smartsMap: Map<string, RDMol> = new Map();
@@ -13,16 +13,23 @@ export async function getStructuralAlerts(smiles: string): Promise<number[]> {
   if (alertsDf == null)
     await loadSADataset();
   const alerts: number[] = [];
-  const mol = getRdKitModule().get_mol(smiles);
-  //TODO: use SustructLibrary and count_matches instead. Currently throws an error on rule id 221
-  // const lib = new _structuralAlertsRdKitModule.SubstructLibrary();
-  // lib.add_smiles(smiles);
+  const Module = getRdKitModule();
+  const mol = Module.get_mol(smiles);
   const smartsCol = alertsDf!.getCol('smarts');
+  let subMol: RDMol;
+  //@ts-ignore: 
+  const lib: SubstructLibrary = new Module.SubstructLibrary();
+  lib.add_mol(mol);
+
   for (let i = 0; i < smartsCol.length; i++) {
-    const subMol = _smartsMap.get(smartsCol.get(i))!;
-    // lib.count_matches(subMol);
-    const matches = mol.get_substruct_matches(subMol);
-    if (matches !== '{}')
+    try {
+      subMol = _smartsMap.get(smartsCol.get(i))!;
+    } catch (e) {
+      console.warn(e);
+      continue;
+    }
+
+    if (lib.count_matches(subMol))
       alerts.push(i);
   }
   mol.delete();
