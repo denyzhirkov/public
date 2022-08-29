@@ -62,3 +62,6 @@ LABEL commit-public=$COMMIT_PUBLIC
 
 RUN echo "Branch main: $BRANCH" > ${HOME_DIR}/git-info.txt ; \
 echo "Commit public: $COMMIT_PUBLIC" >> ${HOME_DIR}/git-info.txt
+
+HEALTHCHECK --interval=1m --timeout=10s --retries=3 --start-period=5s \
+  CMD curl -f http://localhost:1234/health || exit 1
