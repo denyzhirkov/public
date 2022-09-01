@@ -21,4 +21,4 @@ can share the project with any user or group while uploading the project or any
 time later. Once you share the project, your addressee gets an email with a
 direct link to the project.
 
-![Upload the project](upload-the-project.gif)
+![Upload the project](upload-project.gif)
