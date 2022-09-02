@@ -3,59 +3,71 @@
 
 # Project
 
-Project is a collection of entities along with the applied visualizations. Projects are used to group and share data and
-other assets with other users. One of the most common applications of projects are dashboards that consist of tables (
-with either static or dynamic data), and visualizations applied to them.
+Project is a collection of entities along with the applied visualizations. It can contain [tables](table.md), [queries](../access/data-query.md),
+[connections](../access/data-connection.md), [data jobs](../access/data-job.md),
+[Jupyter notebooks](../compute/jupyter-notebook.md)
+, [predictive models](../learn/predictive-modeling.md), and other. Use projects to group and
+share your data work with others.
 
-## Uploading a project
+## Upload a project
 
-Creating a project is easy. After getting the data of interest in the scratchpad project in [workspace](workspace.md),
-click on the `UPLOAD` button. After the project gets uploaded to the server, a separate window pops us asking you whom
-to share the project with. By default, it is only accessible by you, you have to share it in order for others to use it.
-
-Or, if you are editing an existing project, click `SAVE` to save your changes.
-
-Use `Share` context action to edit access permissions. Sharing a project will automatically share all entities and data
-inside.
+While working with data in [workspace](workspace.md), Datagrok doesn’t make any
+data copies and performs all manipulations in the browser without involving the
+server. So your project resides only in your browser until you upload it to the
+server.
 
 ### Dynamic data
 
-Whenever a table is created by executing a [function](../overview/functions/function.md)
-(such as a [database query](../access/data-query.md)), this information gets stored with the table as a "generation
-script". This serves multiple purposes:
+Upload with data synchronization (**Data sync** is on) if you want to retrieve
+the latest view of the data you’ve entered when you (or the user you might share
+with) open the project next time. In this case, the platform doesn’t save the
+data itself but the connection to the initial data source and the
+[function](../overview/functions/function.md) by which the data was obtained.
 
-* Provides data lineage
-* On-demand data refreshing (Table toolbox, "Query" panel, `REFRESH` button)
-* Enables publishing dashboards with the dynamic data
+Upload without data synchronization (**Data sync** is off) if you want to save
+or share the static data.
 
-In the "Upload project" dialog, a "Data sync" option appears next to the tables that have a generation script defined.
-This option determines whether the data should be stored as a static snapshot, or as a generation script. In the latter
-case, the function will be re-executed whenever the project is opened.
+Turn on **Presentation mode** to view or share the project without side panels.
+**F7** helps to switch between presentation and design modes.
 
-![project-upload-data-sync](project-upload-data-sync.png)
+## Share a project
+
+By default, you are your project's owner and the only person who can see it. You
+can share the project with any user or group while uploading the project or any
+time later. Sharing a project shares all entities and data inside. Once you
+share the project, your addressee gets an email with a direct link to the
+project.
+
+![Upload the project](upload-project.gif "Upload the project")
+
+<!--Or, if you are editing an existing project, click `SAVE` to save your changes.-->
 
 ## Project types
 
-Projects are organized in a tree structure. Rights on particular [entities](objects.md) are inherited based on this
-hierarchy. There are two main types of projects: _root_ and _regular_. Root projects can contain one or more non-root
-projects, for example, the link `Demo:CoffeeCompany`
-indicates that the `CoffeeCompany` project is part of the root project `Demo`. Any link to an entity on the platform
-starts with the root project. And since an entity can have only one canonic address, other related projects will
-reference the link rather than the entity itself. This fact becomes important in the context of regular projects. As the
-name suggests, they are the most common ones
-(that's what users create by default). Entities from such a project belong to the higher-level namespace, which means
-they are tied to the root project. To find out where an entity comes from, see `Links` in the `Details` tab of the
-property panel.
-
-Root projects are automatically created for users and packages. When the user uploads a project, it gets saved to their
-namespace. However, the existing entities will be available in the user's project via link. As for packages, each
-version has its own project, which allows sharing packages on a version level.
+The platform organizes projects in a tree structure. This hierarchy determines
+the order of rights inheritance on particular [entities](objects.md) There are
+two main types of projects: _root_ and _regular_. Root projects can contain one
+or more non-root projects. For example, the link  **Demo:CoffeeCompany**
+indicates that the **CoffeeCompany** project is a part of the root project
+**Demo**. Any link to an entity on the platform starts with the root project.
+And since an entity can have only one canonic address, other related projects
+reference the link rather than the entity itself. This fact becomes important in
+the context of regular projects. As the name suggests, they are the most common
+ones (that's what users create by default). Entities from such a project belong
+to the higher-level namespace, which means they are tied to the root project. To
+find out where an entity comes from, see **Links** in the **Details** tab of the
+property panel. Users and packages automatically create root projects. When you
+upload a project, it gets saved to your namespace. However, you can access the
+existing entities in the project via a link. As for packages, each version has
+its own project, so that you can share packages on a version level.
 
 ## Project gallery
 
-Browse projects that are available to you. Use [Smart search](smart-search.md) for powerful filtering capabilities.
+Browse projects that are available to you. Use [Smart search](smart-search.md)
+for powerful filtering capabilities.
 
-Click on the context menu to the left of the search box to control sort order, as well as access your recent searches.
+To control sort order and access your recent searches, select the context menu
+left of the search box.
 
 Controls:
 
@@ -67,7 +79,7 @@ Controls:
 
 ## Filtering
 
-The following fields could be used to filter projects with [smart search](smart-search.md):
+To filter projects with [smart search](smart-search.md) use  the following fields:
 
 | Field        | Description                                 |
 |--------------|---------------------------------------------|
@@ -82,9 +94,10 @@ The following fields could be used to filter projects with [smart search](smart-
 
 See also:
 
-* [Create project](create-project.md)
+<!--* [Create project](create-project.md)-->
 * [Data pipeline](../access/data-pipeline.md)
 * [Data connection](../access/data-connection.md)
 * [Data query](../access/data-query.md)
 * [Data job](../access/data-job.md)
 * [Function call](functions/function-call.md)
+<!--* [Projects tutorial](../_internal/tutorials/projects.md)-->
