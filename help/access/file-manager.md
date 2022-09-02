@@ -8,7 +8,7 @@ driven property panel, obtain data analytics and summary statistics in tooltips,
 and filter data right in the overview window. Besides, the file manager
 instantly renders smiles as molecules.
 
-GIF
+![File manager preview feature](file-manager-preview.gif "File manager preview feature")
 
 The Datagrok platform can run applications that simplify data recognition and
 search right from the file manager. For example, the [Clinical Case](https://github.com/datagrok-ai/public/tree/master/packages/ClinicalCase#readme) is an
@@ -16,7 +16,7 @@ application for exploring clinical data represented in SDTM format. It
 automatically detects if there is a file with SDTM format data in the folder you
 open and prompts you to use the Clinical Case package.
 
-![Clinical Case](file-manager-clinical-case-short.gif)
+![Clinical Case](file-manager-clinical-case-short.gif "Clinical Case application detects SDTM format data")
 
 Also, Datagrok supports Scripts that can process data without opening the file.
 Such scripts are convenient for data science teams that actively work with
@@ -29,12 +29,13 @@ example, the Cell Imaging Segmentation script segmentates cells in the image and
 counts their number. You can see the results of such processing in the preview
 section of the property panel.
 
-![Cell imaging segmentation](file-manager-cell-imaging-segmantation.gif)
+![Cell imaging segmentation](file-manager-cell-imaging-segmantation.gif "Cell imaging segmentation script")
 
 File manager is associated with a workspace that provides interactive data
 processing dashboards.
 
-GIF
+![Workspace](file-manager-related-dashboards.gif "Interactive data
+processing dashboards")
 
 ## Load a file
 
