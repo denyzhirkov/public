@@ -11,8 +11,9 @@ instantly renders smiles as molecules.
 ![File manager preview feature](file-manager-preview.gif "File manager preview feature")
 
 The Datagrok platform can run applications that simplify data recognition and
-search right from the file manager. For example, the [Clinical Case](https://github.com/datagrok-ai/public/tree/master/packages/ClinicalCase#readme) is an
-application for exploring clinical data represented in SDTM format. It
+search right from the file manager. For example, the [Clinical
+Case](https://github.com/datagrok-ai/public/tree/master/packages/ClinicalCase#readme)
+is an application for exploring clinical data represented in SDTM format. It
 automatically detects if there is a file with SDTM format data in the folder you
 open and prompts you to use the **Clinical Case** package.
 
@@ -24,10 +25,11 @@ files. All you need is to write an executable script in any programming language
 and connect it to the Datagrok platform. Now you can analyze data right where it
 is stored or whenever you can find it. You don’t need to upload or open files.
 Instead, select the file in the Datagrok file manager, and if the data is
-suitable for processing by the script, you receive the result in a preview. For
-example, the **Cell Imaging Segmentation** script segmentates cells in the image and
-counts their number. You can see the results of such processing in the preview
-section of the property panel.
+suitable for processing by the script, you receive the result in a preview.
+
+For example, the **Cell Imaging Segmentation** script segmentates cells in the
+image and counts their number. You can see the results of such processing in the
+preview section of the property panel.
 
 ![Cell imaging segmentation](file-manager-cell-imaging-segmantation.gif "Cell imaging segmentation script")
 
@@ -40,9 +42,9 @@ processing dashboards")
 ## Load a file
 
 Datagrok supports the most popular data formats, such as CSV, TXT, JSON, and
-others, including [tabular and molecular structure](file.md) ones. To load a local file,
-drag and drop it into the Datagrok workspace. The platform highlights the area
-where to place it.
+others, including [tabular and molecular structure](file.md) ones. To load a
+local file, drag and drop it into the Datagrok workspace. The platform
+highlights the area where to place it.
 
 To load a file from remote storage, create a new file share:
 
