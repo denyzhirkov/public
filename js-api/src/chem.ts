@@ -35,7 +35,7 @@ export function isMolBlock(s: string | null) {
 export namespace chem {
 
   export const SMILES = 'smiles';
-  export const MOLV2000 = 'molv2000';
+  export const MOL = 'mol';
   export const SMARTS = 'smarts';
 
   export enum SKETCHER_MODE {
@@ -66,7 +66,13 @@ export namespace chem {
       return this.host!._molfile;
     }
 
-    set molFile(s: string) { }    
+    set molFile(s: string) { }
+
+    set molFileV3(s: string) { }
+    
+    get molFileV3(): string {
+      return this.host!._molfileV3;
+    }
 
     /** SMARTS query */
     async getSmarts(): Promise<string> {
@@ -109,8 +115,11 @@ export namespace chem {
     _mode = SKETCHER_MODE.INPLACE;
     _smiles = '';
     _molfile = WHITE_MOLBLOCK;
+    _molfileV3 = WHITE_MOLBLOCK;
     _smarts = '';
     unitsBeforeInit = '';
+    molV3000selected = false;
+    
 
     extSketcherDiv = ui.div([], {style: {cursor: 'pointer'}});
     inplaceSketcherDiv: HTMLDivElement|null = null;
@@ -144,12 +153,14 @@ export namespace chem {
       //   }
       // }
       // return this.sketcher && this.sketcher._sketcher ? this.sketcher.molFile : !this._molfile ? returnConvertedMolfile() : this._molfile;
-      return this.sketcher && this.sketcher._sketcher ? this.sketcher.molFile : this._molfile;
+      return this.sketcher && this.sketcher._sketcher ? this.molV3000selected ? this.sketcher.molFileV3 : this.sketcher.molFile :
+        this.molV3000selected ? this._molfileV3 : this._molfile;
     }
 
     setMolFile(x: string): void {
-      this._molfile = x;
-      this.sketcher && this.sketcher._sketcher ? this.sketcher!.molFile = x : this.unitsBeforeInit = MOLV2000;
+      this.molV3000selected = this.isMolV3000(x);
+      this.molV3000selected ? this._molfileV3 = x : this._molfile = x;
+      this.sketcher && this.sketcher._sketcher ? this.molV3000selected ? this.sketcher!.molFileV3 = x : this.sketcher!.molFile = x : this.unitsBeforeInit = MOL;
       this.updateExtSketcherContent(this.extSketcherDiv);
     }
 
@@ -229,10 +240,14 @@ export namespace chem {
         this._mode = mode;
       this.root.append(ui.div([ ui.divText('') ]));
       this.sketcherCreated.subscribe(() => {
-        const molecule = this.unitsBeforeInit === SMILES ? this._smiles : this.unitsBeforeInit === MOLV2000 ? this._molfile : this._smarts;
+        const molecule = this.unitsBeforeInit === SMILES ? this._smiles : this.unitsBeforeInit === MOL ? this.molV3000selected ? this._molfileV3 : this._molfile : this._smarts;
         this.setMolecule(molecule, this.unitsBeforeInit === SMARTS);
       });
       setTimeout(() => this.createSketcher(), 100);
+    }
+
+    isMolV3000(molString: string) {
+      return molString.split("\n")[3].includes('V3000');
     }
 
     /** In case sketcher is opened in filter panel use EXTERNAL mode*/

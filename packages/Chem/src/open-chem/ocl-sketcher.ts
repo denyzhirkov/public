@@ -36,7 +36,15 @@ export class OpenChemLibSketcher extends grok.chem.SketcherBase {
     return this._sketcher ? this._sketcher.getMolFile() : this.host?.getMolFile();
   }
 
+  get molFileV3() {
+    return this._sketcher ? this._sketcher.getMolFileV3() : this.host?.getMolFile();
+  }
+
   set molFile(s) {
+    this._sketcher.setMolFile(s);
+  }
+
+  set molFileV3(s) {
     this._sketcher.setMolFile(s);
   }
 
