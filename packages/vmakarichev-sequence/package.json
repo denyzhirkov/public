@@ -1,0 +1,35 @@
+{
+	"name": "vmakarichev-sequence",
+	"friendlyName": "vmakarichev-sequence",
+	"version": "0.0.1",
+	"description": "",
+	"dependencies": {
+		"datagrok-api": "latest",
+		"cash-dom": "latest",
+		"dayjs": "latest",
+		"@datagrok-libraries/utils": "latest"
+	},
+	"devDependencies": {
+		"webpack": "latest",
+		"webpack-cli": "latest",
+		"ts-loader": "latest",
+		"typescript": "latest"
+	},
+	"scripts": {
+		"link-all": "",
+		"debug-vmakarichev-sequence": "webpack && grok publish",
+		"release-vmakarichev-sequence": "webpack && grok publish --release",
+		"build-vmakarichev-sequence": "webpack",
+		"build": "webpack",
+		"debug-vmakarichev-sequence-dev": "webpack && grok publish dev",
+		"release-vmakarichev-sequence-dev": "webpack && grok publish dev --release",
+		"debug-vmakarichev-sequence-public": "webpack && grok publish public",
+		"release-vmakarichev-sequence-public": "webpack && grok publish public --release"
+	},
+	"canEdit": [
+		"Developers"
+	],
+	"canView": [
+		"All users"
+	]
+}
