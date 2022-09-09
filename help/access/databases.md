@@ -17,9 +17,9 @@ Datagrok provides comprehensive functionality for working with databases:
 
 ## Connection
 
-To get data access in a particular data source we use connections. We currently
-support over 30 connectors to different databases. You can use a them or if
-needed add a new connector to get access to your database.
+To get data access in a particular data source, we use connections. We currently
+support over 30 connectors to different databases. You can use them or add a new
+connector to get access to your database.
 
 ### Add new connector
 
@@ -69,33 +69,63 @@ The supported connectors with their specific parameters are the following:
 | [Virtuoso]( connectors/virtuoso.md)        | &check; | &check; | &check; | &check;      | &check;       | &check; | &check;           | &check; | &check;  |                                                                              |
 | [Web]( connectors/web.md)                  |         |         |         |              |               |         |                   |         |          | [See the list]( connectors/web.md#connection-parameters)         |
 
+#### JDBC connection
+
+For some cases, a connection may require a custom JDBC connection string. For
+this case, the JDBC based data connection has the parameter **Conn. string**. If
+filled, the connector uses it and ignores all other parameters except for
+**Login** and **Password**.
+
 ### Create a connection
 
-Learn the steps to create a new connection. Please pay attention, that after
+Learn the steps to create a new connection. Please pay attention that after
 database connection, not only tables but also their columns are available to
 you.
 
 ![Create a connection](database-connection.gif)
 
-### JDBC connection
+#### Manage database table
 
-For some cases connection may require custom JDBC connection string. For this
-case, JDBC-based data connection has parameter **Conn. string**. If filled, it
-is used for connection, and all other parameters are ignored except for
-**Login** and **Password**.
+Because this table resides in an external database, its analysis is less
+interactive than the already imported tables. However, the following actions are
+available to you:
+
+* **Get All**—retrieves all data. Depending on the table size, it might take a
+  lot of time and memory
+* **Get TOP 100**—retrieves the top 100 rows.
+* **Visual Query…**—lets you visually edit the query against that table,
+  including aggregations, filters, pivots, and other conditions.
+* **New SQL Query…**—starts editing a SQL query.
+* **Build Query…**—opens a dialog for joining this table with the others in this
+  schema and uses foreign keys information for building the UI.
 
 ## Creating queries
 
-Once a connection is set up, you are ready to start creating queries. There are
-multiple ways to do so: manually or programmatically.
+Datagrok provides vast functionality for creating queries:
 
-### Data query
+* Create query:
+  * programmatically—a usual SQL query  
+  * manually—an aggregation query by **Visual Query**
+* Join several tables via **Query Builder**
+* Use data provider custom aggregation functions
+* Parametrize your query and transform the results
+* Save query and its result separately
 
 ### DB visual query
 
-### Parameterized queries
+Use the standard data aggregation tool to visually query datasets that reside in a database. Note that the actual data aggregation is performed on a server. This feature is supported for all relational data connectors.
+
+Uses custom aggregation functions of data provider per each database which are exposed and used in our interface https://youtu.be/dKrCk38A1m8?t=1866
+
+GIF
 
 ### Query Builder
+
+Use **Query Builder** to build a query for multiple tables using visual interface
+
+GIF
+
+### Parameterized queries
 
 ### Query View
 
@@ -106,10 +136,6 @@ multiple ways to do so: manually or programmatically.
 ## Browsing and previewing
 
 ### DB exploration
-
-### Database table
-
-### Database table column
 
 ## Aggregation
 
