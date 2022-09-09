@@ -113,15 +113,19 @@ Datagrok provides vast functionality for creating queries:
 
 ### DB visual query
 
-Use the standard data aggregation tool to visually query datasets that reside in a database. Note that the actual data aggregation is performed on a server. This feature is supported for all relational data connectors.
+Use the standard data aggregation tool to visually query datasets that reside in
+a database. Note that the actual data aggregation is performed on a server. This
+feature is supported for all relational data connectors.
 
-Uses custom aggregation functions of data provider per each database which are exposed and used in our interface https://youtu.be/dKrCk38A1m8?t=1866
+Uses custom aggregation functions of data provider per each database which are
+exposed and used in our interface.
 
 GIF
 
 ### Query Builder
 
-Use **Query Builder** to build a query for multiple tables using visual interface
+Use **Query Builder** to build a query for multiple tables using visual
+interface
 
 GIF
 
