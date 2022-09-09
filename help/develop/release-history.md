@@ -1,6 +1,19 @@
 <!-- TITLE: Release History -->
 <!-- SUBTITLE: -->
 
+# 2022-09-09 Dev build 1.6.10
+
+## Latest Docker Images
+
+* Datagrok: 
+  *  `docker pull datagrok/datagrok:1.6.10`
+* [Docker-Compose](https://datagrok.ai/help/develop/admin/docker-compose)
+
+## Addressed Issues
+
+* (Bug) Package Credentials Editor doesn't work (WIP)
+
+
 # 2022-09-08 Dev build 1.6.9
 
 ## Latest Docker Images
