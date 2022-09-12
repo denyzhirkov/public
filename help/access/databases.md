@@ -4,6 +4,7 @@ In this article:
 
 * [Data access](databases.md/#accessing-databases)
 * [Queries](databases.md/#queries)
+* Database Manager
 * [Managing database connections](databases.md/#managing-database-connections)
 * [Managing content within a database
   connection](databases.md/#managing-file-shares)
@@ -18,8 +19,7 @@ Datagrok lets you access databases in a secure and manageable way.
 > _Database connection_ is a named connection to the database you access with
 > Datagrok. The platform can create a _database connection_ to all the popular
 > databases, including PostgreSQL, MySQL, MS SQL, Maria DB, Oracle, and others.
-> When you use Datagrok, you don’t need to know a physical location or details
-> about the database. You only need a _database connection_ name. A _database
+> A _database
 > connection_ allows authorized users to access and query databases.
 >
 >_Connections_ are Datagrok [entities](../datagrok/objects.md), which means they
@@ -28,10 +28,7 @@ Datagrok lets you access databases in a secure and manageable way.
 
 ### Supported connectors
 
-Out-of-the-box, Datagrok provides connectors to the following databases:
-Microsoft  Access, Amazon Athena, Google BigQuery, Apache Cassandra, IBM DB2,
-Denodo, FirebirdSQL, Apache HBase, Apache Hive, Apache Hive2, Apache Impala,
-MariaDB, MongoDB, MS SQL, MySql, Neo4j, OData, Oracle Database, and the others.
+Out-of-the-box, Datagrok provides 30+ connectors to the common databases.
 For the full list of supported connectors and required parameters, see
 [Supported connectors]( connectors/supported-connectors.md).
 
@@ -44,10 +41,9 @@ To connect a database, follow these steps:
 
 1. From the main menu on the left, click **Data** > **Databases**.
 1. Open the **Add new connection** dialog by either: (1) expanding the
-   **Actions** panel and clicking **Add new connection…**, or (2) Rightclicking
-   on the appropriate connector in the tree, and choosing **Add connection…**.
-1. From the **Data Source** dropdown list, select the desired database if
-   needed. This updates the dialog with connection-specific parameter fields.
+   **Actions** panel and clicking **Add new connection…**, or (2) Right-clicking
+   the appropriate connector in the tree, and choosing **Add connection…**.
+1. From the **Data Source** dropdown list, select the desired database when prompted. This updates the dialog with connection-specific parameter fields.
 1. Fill in all dialog fields displayed.
 
 >Notes:
@@ -82,9 +78,7 @@ To connect a database, follow these steps:
 
 ### Querying a database
 
-When the database connection is set, you can start querying the database. You
-can get all data or the first 100 rows from a table or use built-in tools to
-create more sophisticated queries.
+When the database connection is set, you can start querying the database. <<!--You can get all data or the first 100 rows from a table or use built-in tools to create more sophisticated queries.-->
 
 Click the table and use the following actions from (1) the table context menu,
 (2) the **Action** tab of the **Property pane**, or (3) the table drop-down menu

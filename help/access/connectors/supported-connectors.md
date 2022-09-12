@@ -45,3 +45,12 @@ following:
 | [Vertica]( connectors/vertica.md)          | &check; | &check; | &check; | &check;      | &check;       | &check; | &check;           | &check; | &check;  |                                                                              |
 | [Virtuoso]( connectors/virtuoso.md)        | &check; | &check; | &check; | &check;      | &check;       | &check; | &check;           | &check; | &check;  |                                                                              |
 | [Web]( connectors/web.md)                  |         |         |         |              |               |         |                   |         |          | [See the list]( connectors/web.md#connection-parameters)         |
+
+See also:
+
+* [Data access](../access.md)
+* [Data connection](../data-connection.md)
+* [Connecting to file shares](../connect-a-file-share.md)
+<!--
+* [Databases](../databases.md)
+* [File shares](../file-shares.md)-->
