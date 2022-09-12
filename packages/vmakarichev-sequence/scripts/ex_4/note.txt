@@ -1,0 +1,66 @@
+#name: Template
+#language: python
+#input: dataframe sequences
+#input: column columnName
+#output: dataframe result {action:join(sequences)}
+
+
+#name: Scatter Plot Python
+#language: python
+#tags: demo, viewers, hide-suggestions
+#input: dataframe t
+#input: column xColumnName {type:numerical}
+#input: column yColumnName {type:numerical}
+#input: column colorColumnName {type:numerical}
+#output: graphics
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+color = t[colorColumnName].values
+cmap = plt.cm.Spectral
+norm = plt.Normalize(vmin=min(color), vmax=max(color))
+
+plt.scatter(t[[xColumnName]], y=t[[yColumnName]], color=cmap(norm(color)), alpha=0.5)
+plt.xlabel(xColumnName)
+plt.ylabel(yColumnName)
+plt.legend()
+plt.show()
+
+import itertools
+
+result = pd.DataFrame()
+result["Corrected"] = sequences[columnName].str.replace(" ", '')
+
+def computeFrequencesOfTriplets(s, series):
+    """
+    Computes frequences of all triplets in the string s
+    s - string
+    series - a dictionary: key -triplet, value - frequency.
+    """
+    for startingIndex in range(3):
+        firstIndex = startingIndex
+        lastIndex = firstIndex + 3
+        while(lastIndex <= len(s)):
+            triplet = s[firstIndex:lastIndex]
+            series[triplet] += 1
+            firstIndex += 3
+            lastIndex += 3
+
+correctSymbols = 'ACGT'
+
+allPossibleTriplets = [''.join(element) for element in itertools.product(correctSymbols, correctSymbols, correctSymbols)]
+
+print(allPossibleTriplets)
+
+tripletSeries = {element: 0 for element in allPossibleTriplets}
+print(tripletSeries)            
+#result["Corrected"] = result["Corrected"].str.upper() 
+
+numOfString = sequences[columnName].size
+
+for seq in sequences[columnName]:
+    computeFrequencesOfTriplets(seq.replace(" ", '').upper(), tripletSeries) 
+
+for i in range(numOfString):
+    result["Corrected"][i] = str(tripletSeries)

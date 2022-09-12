@@ -12,7 +12,8 @@ class VmakarichevSequencePackageDetectors extends DG.Package {
     //output: string semType
     detectNucleotides(col) {   
         
-        const elements = new Set("ATGC");
+        //const elements = new Set("ATGC");
+        const elements = new Set("ATGC atgc");
         
         let categories = col.categories;
 
