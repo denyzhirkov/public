@@ -1,152 +1,106 @@
 # Databases
 
-## Overview
+In this article:
 
-Datagrok provides comprehensive functionality for working with databases:
+* [Data access](databases.md/#accessing-databases)
+* [Queries](databases.md/#queries)
+* [Managing database connections](databases.md/#managing-database-connections)
+* [Managing content within a database connection](databases.md/#managing-file-shares)
+* [Sharing content](databases.md/#sharing-content)
 
-* Connection:
-  * Add new connector
-  * Supported connectors
-  * Create a connection
-* Previewing tables and columns
-* Creating queries
-* Browsing and previewing queries
-* Aggregation
-* Managing content
-* Sharing access
+## Accessing databases
 
-## Connection
+Datagrok lets you access databases in a secure and manageable way.
 
-To get data access in a particular data source, we use connections. We currently
-support over 30 connectors to different databases. You can use them or add a new
-connector to get access to your database.
-
-### Add new connector
-
-Learn the steps to add a new connector.
-
-GIF
+> Key concept: _database connection_
+>
+> _Database connection_ is a named connection to the database you access with Datagrok. The platform can create a _database connection_ to all the popular databases, including PostgreSQL, MySQL, MS SQL, Maria DB, Oracle, and others. When you use Datagrok, you don’t need to know a physical location or details about the database. You only need a _database connection_ name. A _database connection_ allows authorized users to access and query databases.
+>
+>_Connections_ are Datagrok [entities](../datagrok/objects.md), which means they can also be used for sharing data with others and for enabling discovery by other Datagrok users.
 
 ### Supported connectors
 
-The supported connectors with their specific parameters are the following:
+Out-of-the-box, Datagrok provides connectors to the following databases: Microsoft  Access, Amazon Athena, Google BigQuery, Apache Cassandra, IBM DB2, Denodo, FirebirdSQL, Apache HBase, Apache Hive, Apache Hive2, Apache Impala, MariaDB, MongoDB, MS SQL, MySql, Neo4j, OData, Oracle Database, and the others. For the full list of supported connectors and required parameters, see [Supported connectors]( connectors/supported-connectors.md).
 
-| Data Source                                            | Server  | Port    | DB      | Cache Schema | Cache Results | SSL     | Connection String | Login   | Password | Other Parameters                                                             |
-|--------------------------------------------------------|---------|---------|---------|--------------|---------------|---------|-------------------|---------|----------|------------------------------------------------------------------------------|
-| [Access]( connectors/access.md)            |         |         | &check; |              |               |         | &check;           | &check; | &check;  |                                                                              |
-| [Athena]( connectors/athena.md)            | &check; | &check; | &check; |              |               |         | &check;           |         |          | [See the list]( connectors/athena.md)                            |
-| [BigQuery]( connectors/bigquery.md)        |         |         |         |              |               |         | &check;           | &check; | &check;  | [See the list]( connectors/bigquery.md#connection-parameters)    |
-| [Cassandra]( connectors/cassandra.md)      | &check; | &check; | &check; | &check;      | &check;       | &check; | &check;           | &check; | &check;  |                                                                              |
-| [DB2]( connectors/db2.md)                  | &check; | &check; | &check; | &check;      | &check;       | &check; | &check;           | &check; | &check;  |                                                                              |
-| [Denodo]( connectors/denodo.md)            | &check; | &check; | &check; | &check;      | &check;       | &check; | &check;           | &check; | &check;  |                                                                              |
-| [DropBox]( connectors/dropbox.md)          |         |         |         |              |               |         |                   |         | &check;  | [See the list]( connectors/dropbox.md#connection-parameters)     |
-| [Files](../../access/connectors/files.md)              |         |         |         |              |               |         |                   | &check; | &check;  | [See the list]( connectors/files.md#connection-parameters)       |
-| [Firebird]( connectors/firebird.md)        | &check; | &check; | &check; | &check;      | &check;       |         | &check;           | &check; | &check;  |                                                                              |
-| [Git]( connectors/git.md)                  |         |         |         |              |               |         |                   |         |          | [See the list]( connectors/git.md#connection-parameters)         |
-| [Google Cloud]( connectors/googlecloud.md) |         |         |         |              |               |         |                   |         |          | [See the list]( connectors/googlecloud.md#connection-parameters) |
-| [HBase]( connectors/hbase.md)              | &check; | &check; | &check; | &check;      | &check;       | &check; | &check;           | &check; | &check;  |                                                                              |
-| [Hive]( connectors/hive.md)                | &check; | &check; | &check; | &check;      | &check;       | &check; | &check;           | &check; | &check;  |                                                                              |
-| [Hive2]( connectors/hive2.md)              | &check; | &check; | &check; | &check;      | &check;       | &check; | &check;           | &check; | &check;  |                                                                              |
-| [Impala]( connectors/impala.md)            | &check; | &check; | &check; |              |               |         | &check;           | &check; | &check;  | [See the list]( connectors/impala.md#connection-parameters)      |
-| [MariaDB]( connectors/mariadb.md)          | &check; | &check; | &check; | &check;      | &check;       | &check; | &check;           | &check; | &check;  |                                                                              |
-| [MongoDB]( connectors/mongodb.md)          | &check; | &check; | &check; | &check;      | &check;       |         | &check;           | &check; | &check;  |                                                                              |
-| [MS SQL]( connectors/mssql.md)             | &check; | &check; | &check; | &check;      | &check;       | &check; | &check;           | &check; | &check;  |                                                                              |
-| [MySql]( connectors/mysql.md)              | &check; | &check; | &check; | &check;      | &check;       | &check; | &check;           | &check; | &check;  |                                                                              |
-| [Neo4j]( connectors/neo4j.md)              | &check; | &check; | &check; | &check;      | &check;       | &check; | &check;           | &check; | &check;  |                                                                              |
-| [OData]( connectors/odata.md)              |         |         |         |              |               |         |                   |         |          | [See the list]( connectors/odata.md#connection-parameters)       |
-| [Oracle]( connectors/oracle.md)            | &check; | &check; | &check; | &check;      | &check;       | &check; | &check;           | &check; | &check;  |                                                                              |
-| [PostgresNet]( connectors/postgres.md)     | &check; | &check; | &check; | &check;      | &check;       | &check; | &check;           | &check; | &check;  |                                                                              |
-| [PostgreSQL]( connectors/postgres.md)      | &check; |         | &check; |              | &check;       | &check; |                   | &check; | &check;  |                                                                              |
-| [Redshift]( connectors/redshift.md)        | &check; | &check; | &check; | &check;      | &check;       | &check; | &check;           | &check; | &check;  |                                                                              |
-| [S3]( connectors/s3.md)                    |         |         |         |              |               |         |                   |         |          | [See the list]( connectors/s3.md#connection-parameters)          |
-| [Snowflake]( connectors/snowflake.md)      | &check; | &check; | &check; | &check;      | &check;       | &check; | &check;           | &check; | &check;  |                                                                              |
-| [Socrata]( connectors/socrata.md)          |         |         |         |              |               |         |                   |         |          | [See the list]( connectors/socrata.md#connection-parameters)     |
-| [Sparql]( connectors/sparql.md)            |         |         |         |              |               |         |                   |         |          | [See the list]( connectors/sparql.md#connection-parameters)      |
-| [SQLite]( connectors/sqlite.md)            |         |         | &check; |              |               |         | &check;           | &check; | &check;  |                                                                              |
-| [Teradata]( connectors/teradata.md)        | &check; | &check; | &check; | &check;      | &check;       | &check; | &check;           | &check; | &check;  |                                                                              |
-| [Twitter]( connectors/twitter.md)          |         |         |         |              |               |         |                   |         |          | [See the list]( connectors/twitter.md#connection-parameters)     |
-| [Vertica]( connectors/vertica.md)          | &check; | &check; | &check; | &check;      | &check;       | &check; | &check;           | &check; | &check;  |                                                                              |
-| [Virtuoso]( connectors/virtuoso.md)        | &check; | &check; | &check; | &check;      | &check;       | &check; | &check;           | &check; | &check;  |                                                                              |
-| [Web]( connectors/web.md)                  |         |         |         |              |               |         |                   |         |          | [See the list]( connectors/web.md#connection-parameters)         |
+> Developers: You can also extend the platfrom by [creating custom connectors](https://github.com/datagrok-ai/public/tree/master/connectors).
 
-#### JDBC connection
+### Connect a database
 
-For some cases, a connection may require a custom JDBC connection string. For
-this case, the JDBC based data connection has the parameter **Conn. string**. If
-filled, the connector uses it and ignores all other parameters except for
-**Login** and **Password**.
+To connect a database, follow these steps:
 
-### Create a connection
+1. From the main menu on the left, click **Data** > **Databases**.
+1. Open the **Add new connection** dialog by either: (1) expanding the **Actions** panel and clicking **Add new connection…**, or (2) Rightclicking on the appropriate connector in the tree, and choosing **Add connection…**.
+1. From the **Data Source** dropdown list, select the desired database, if needed. This updates the dialog with connection-specific parameter fields.
+1. Fill in all dialog fields displayed.
 
-Learn the steps to create a new connection. Please pay attention that after
-database connection, not only tables but also their columns are available to
-you.
+>Notes:
+>
+> If the connection requires a custom JDBC connection string fill in the parameter **Conn. string**. In this case, you don’t need to fill in other parameters except for **Login** and **Password**.
+>
+>You can enter _credentials_ (typically, login/password) manually. When enetered manually, Datagrok stores secrets in a secure [privilege management system](/govern/security.md/#credentials). You can also set up connection using Datagrok's integration with the AWS Secrets Manager (see [Secrets Managers](/access/data-connection-credentials.md/#secrets-managers) for details).
+>
+>To define who can change the connection credentials, make a selection from the **Credential owner** dropdown.
+
+1. Click **TEST** to the connection, then click **OK** to save it.
 
 ![Create a connection](database-connection.gif)
 
-#### Manage database table
+## Queries
 
-Because this table resides in an external database, its analysis is less
-interactive than the already imported tables. However, the following actions are
-available to you:
+* [Querying a database](databases.md/#querying-a-database):
+  * Write SQL query in [**Query View**](databases.md/#query-view)
+  * Aggregate table columns and rows in [**Visual query**](databases.md/#visual-query)
+  * Join tables in [**Query Builder**](databases.md/#query-builder)
+* [Parametrize query](databases.md/#parameterize-a-query)
+* [Postprocess query results](databases.md/#postprocess-query-results)
 
-* **Get All**—retrieves all data. Depending on the table size, it might take a
-  lot of time and memory
-* **Get TOP 100**—retrieves the top 100 rows.
-* **Visual Query…**—lets you visually edit the query against that table,
-  including aggregations, filters, pivots, and other conditions.
-* **New SQL Query…**—starts editing a SQL query.
-* **Build Query…**—opens a dialog for joining this table with the others in this
-  schema and uses foreign keys information for building the UI.
+### Querying a database
 
-## Creating queries
+When the database connection is set, you can start querying the database. You can get all data or the first 100 rows from a table or use built-in tools to create more sophisticated queries.
 
-Datagrok provides vast functionality for creating queries:
+Click the table and use the following actions from (1) the table context menu, (2) the **Action** tab of the **Property pane**, or (3) the table drop-down menu on  the **Property pane** :
 
-* Create query:
-  * programmatically—a usual SQL query  
-  * manually—an aggregation query by **Visual Query**
-* Join several tables via **Query Builder**
-* Use data provider custom aggregation functions
-* Parametrize your query and transform the results
-* Save query and its result separately
+* **Get All** to retrieve all the data from the table to a dataframe in the workspace
 
-### DB visual query
+  >Note: Depending on the table size, it might take a lot of time and memory.
 
-Use the standard data aggregation tool to visually query datasets that reside in
-a database. Note that the actual data aggregation is performed on a server. This
-feature is supported for all relational data connectors.
+* **Get TOP 100** to retrieve the first 100 rows of the selected table to a dataframe in the workspace
+* **New SQL Query…** to start writing a SQL query against this table in **Query View**
+* **Build Query…** to join this table with the others in this schema
+* **Visual Query…** to visually edit the query against this table
 
-Uses custom aggregation functions of data provider per each database which are
-exposed and used in our interface.
+#### Query View
+
+#### Visual Query
+
+Use the standard data aggregation tool to visually query datasets that reside in a database. Note that the actual data aggregation is performed on a server. This feature is supported for all relational data connectors.
+Use the custom aggregation function for each DB (open source Connectors). The types of aggregations that the data provider exposes are picked up by DG’s UI such that you see an option to aggregate by that function if you’re using that data provider
 
 GIF
 
-### Query Builder
+#### Query Builder
 
-Use **Query Builder** to build a query for multiple tables using visual
-interface
+Use **Query Builder** to build a query for multiple tables using visual interface
 
 GIF
 
-### Parameterized queries
+### Parameterize a query
 
-### Query View
+### Save query
 
-### SPARQL query
+Two options to save a query:
 
-### Edit Socrata query
+* Save as SQL query (can modify and introduce parameters)
+* Save query results as dataframe to the workspace
 
-## Browsing and previewing
+### Postprocess query results
 
-### DB exploration
+## Managing database connections
 
-## Aggregation
+## Managing content within a database connection
 
-## Managing content
+## Sharing content
 
-## Sharing access
+See also:
 
-### Data connection
-
-### Data connection credentials
+## Resources
