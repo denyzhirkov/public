@@ -69,111 +69,99 @@ To connect a database, follow these steps:
 ## Queries
 
 * [Query a database](databases.md/#query-a-database):
-  * [Write a SQL query](databases.md/#write-a-sql-query)
-  * [Create an aggregation query](databases.md/#create-an-aggregation-query)
-  * [Build a query for multiple
-    tables](databases.md/#build-a-query-for-multiple-tables)
+  * Write a SQL query
+  * Create an aggregation query
+  * Build a query for multiple tables
 * [Parametrize query](databases.md/#parameterize-a-query)
 * [Postprocess query results](databases.md/#postprocess-query-results)
 
 ### Query a database
 
-When the database connection is set, you can start querying the database. You
-can find all actions to get queries against the table in:
-
-* The context menu of the table
-* The **Actions** info panel of the **Property pane**
-* The context menu of the table on the **Property pane**
-
-To retrieve all the data from the table, select **Get All** from the table
-context menu.
- >Note: Depending on the table size, it might take a lot of time and memory.
-
-To retrieve the first 100 rows of the table, select **Get TOP 100** from the
-table context menu.
-
-#### Write a SQL query
-
-To write a SQL query for the table, follow these steps:
-
-1. Select **New SQL Query…** from the table context menu.
-1. Write SQL query in the opened window.
-
-To save a query to the Datagrok server, enter the query name and press the
-**Save** button on the **Menu Ribbon**.
-
-#### Create an aggregation query
-
-To create an aggregation query against the particular table, follow these steps:
-
-1. Select the **Visual Query…** from the table context menu. This action opens
-   the **Visual Query** form.
-1. Fill in the fields.
-
->Note: The result of the query appears instantaneously, which is an efficient
->way to query large databases that, for example, may not fit into the memory.
->Also, you can view query results in advance.
-
-To calculate an aggregate value of the column, add it to the **Measures**
-section:
-
-1. Click plus behind the **Measures**. This opens the context menu.
-1. In the first row of the context menu, choose the aggregation type.
-1. Choose the column you want to be aggregated.
-
->Note: the list of aggregation types contains the Datagrok standard types of
->aggregation and may contain custom aggregation functions exposed by the
->database provider.
-
-To change the aggregation parameter, right-click it and select the new
-aggregation type and column.
-
-To define a column to be used as a key, add it to the **Rows** section:
-
-1. Click plus behind the **Rows**. This opens the list of columns.
-1. Select the column.
-
-You can use more than one column as a key.
-
-Datagrok supports the ability to pivot data. To put values in the columns, add
-them to the **Columns** section:
-
-1. Click plus behind the **Columns**. This opens the list of columns.
-1. Select the column whose values should appear in the query result columns.
-
-To save a query to the Datagrok server, enter the query name and press the
-**Save** button on the **Menu Ribbon**.
+Once you connected a database, you can start querying it. To see a full list of
+available options, right-click the table. Alternatively on the **Property
+pane**, either click the drop-down arrow next to the table name or expand the
+**Actions** info panel.
 
 GIF
 
-#### Build a query for multiple tables
+Subject to your permissions, you can choose to:
 
-To build a query for multiple tables using a visual interface, follow these
-steps:
+* Retrieve all data (**Get All**).
+* Retrieve the first 100 rows (**Get TOP 100**).
+* [Write a SQL query](databases.md/#write-a-sql-query) (**New SQL Query…**).
+* [Aggregate data via query](databases.md/#aggregate-data-via-query) (**Visual
+  Query…**).
+* [Join tables](databases.md/#join-tables) (**Build Query…**).
 
-1. Click the table
-1. Select the **Build Query…** from the table context menu. This opens the
-   **Query builder** form.
-1. Select columns of the tables and combine them with the other tables' columns.
+#### Write a SQL query
 
->Note: The platform figures out the schema of the database and, starting from
->the selected table, adds all the tables that could be reached by following the
->foreign keys.
+To query a table manually, follow these steps:
+
+1. From the table's context menu, click **New SQL Query…**. The **Query View**
+   opens.
+1. In the **Query View**, write the SQL query.
+1. When finished, enter the query name. Then on the **Menu Ribbon**, click
+   **Save** to save the query to the Datagrok server.
+
+#### Aggregate data via query
+
+To aggregate a table data, follow these steps:
+
+1. From the table's context menu, click **Visual Query…**. This action opens
+   the **Visual Query** form.
+1. To calculate an aggregate value of the column, add this column to the
+   **Measures** section:
+
+   * Click the **Add an aggregation** icon next to **Measures**. This opens the
+     context menu.
+   * In the first row of the context menu, choose the aggregation type.
+     >Note: out-of-the-box the list of aggregation types contains the Datagrok
+     >standard aggregation functions and may contain custom aggregation
+     >functions exposed by the database provider. For exapmle, Datagrok exposes
+     >Postrges database GIS (Geo Information System) functions.
+   * Choose the column to aggregate. Datagrok automaticaly shows the result of
+     the query in the dataframe below.
+      > Note: You can change the aggregation parameter by right-clicking it and
+      > selecting the new aggregation type and column.
+
+1. To group query results by column values, add this column to the **Rows**
+   section by clicking the **Add column to group the rows on** icon next to
+   **Rows**. <!--You can use more than one column as a key.-->
+1. To substitute the column values into the resulting columns, add this column
+   to the **Columns** section by clicking the **Add column to pivot on** icon
+   next to **Columns**.
+1. When finished, enter the query name. Then on the **Menu Ribbon**, click
+   **Save** to save the query to the Datagrok server.
+
+GIF
+
+#### Join tables
+
+Datagrok detects the schema of the database. When you open a table in **Query
+builder**, the platform automaticaly displays all the tables connected to it by
+the foreign keys.
+
+To join tables, follow these steps:
+
+1. From the table's context menu, click the **Build Query…**. This action opens
+   the  a **Query builder** dialog.
+1. Select columns of the tables and combine them with the other tables'
+   columns.
 
 The result of the query appears instantaneously. And at any stage of building
 the query, you can add the results to the workspace. To do that, follow these
 steps:
 
 1. At the bottom of the **Query builder** window, click the context menu icon.
-1. Select **Add results to workspace**. The results appear in the dataframe in
+1. Click **Add results to workspace**. The results appear in the dataframe in
    the workspace.
 
 To save a query to the Datagrok server, follow these steps:
 
 1. At the bottom of the **Query builder** window, click the context menu icon.
-1. Select **Save as query**. This opens a query view window.
+1. Click **Save as query**. This opens a **Query View** window.
 1. Enter the query name.
-1. Press the **Save** button on the **Menu Ribbon**.
+1. On the **Menu Ribbon**, click **Save**.
 
 GIF
 
