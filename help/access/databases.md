@@ -79,11 +79,11 @@ To connect a database, follow these steps:
 ### Query a database
 
 When the database connection is set, you can start querying the database. You
-can find all actions to get queries under the table in:
+can find all actions to get queries against the table in:
 
-* The context menu of this table
+* The context menu of the table
 * The **Actions** info panel of the **Property pane**
-* The context menu of this table on the **Property pane**
+* The context menu of the table on the **Property pane**
 
 To retrieve all the data from the table, select **Get All** from the table
 context menu.
