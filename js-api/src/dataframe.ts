@@ -80,7 +80,7 @@ export interface CsvExportOptions {
   qualifierAsColumn?: boolean;
 
   /** Column-specific formats (column name -> format).
-      For format examples, see [dateTimeFormatters]. */
+   For format examples, see [dateTimeFormatters]. */
   columnOptions?: ColumnsCsvExportOptions;
 }
 
@@ -483,7 +483,7 @@ export class DataFrame {
   /** Sample: {@link https://public.datagrok.ai/js/samples/data-frame/events/events} */
   get onDataChanged(): Observable<any> {
     return rxjs.concat(this.onValuesChanged, this.onColumnsAdded,
-      this.onColumnsRemoved, this.onRowsAdded, this.onRowsRemoved);
+        this.onColumnsRemoved, this.onRowsAdded, this.onRowsRemoved);
   }
 
   /** Sample: {@link https://public.datagrok.ai/js/samples/data-frame/events/events} */
@@ -970,7 +970,7 @@ export class Column<T = any> {
     if (type == null)
       type = this.type;
     return new Promise((resolve, reject) => api.grok_Column_ApplyFormula(
-      this.dart, formula, type, treatAsString, (c: any) => resolve(toJs(c)), (e: any) => reject(e)));
+        this.dart, formula, type, treatAsString, (c: any) => resolve(toJs(c)), (e: any) => reject(e)));
   }
 
   /** Creates and returns a new column by converting [column] to the specified [newType]. */
@@ -988,7 +988,7 @@ export class Column<T = any> {
    *  - [DG.STR_AGG] and [DG.STAT_COUNTS] for string columns,
    *  - [DG.STAT_COUNTS], [DG.AGG.MIN], [DG.AGG.MAX], [DG.AGG.AVG] for datetime columns,
    *  - [DG.AGG.TOTAL_COUNT] and [DG.AGG.MISSING_VALUE_COUNT] for virtual columns.
-  */
+   */
   aggregate(type: ColumnAggregationType): any {
     return api.grok_Column_Aggregate(this.dart, type);
   }
@@ -1112,8 +1112,8 @@ export class ColumnList {
 
   getOrCreate(name: string, type: ColumnType, length: number): Column {
     return this.contains(name) ?
-    this.byName(name) :
-    this.add(DG.Column.fromType(type, name, length));
+        this.byName(name) :
+        this.add(DG.Column.fromType(type, name, length));
   }
 
   /** Inserts a column, and optionally notifies the parent dataframe.
@@ -1769,6 +1769,38 @@ export class Stats {
   get q3(): number {
     return api.grok_Stats_Get_Q3(this.dart);
   }
+
+  /** @returns {number} - first quantile */
+  get perc01(): number {
+    return api.grok_Stats_Get_PERC01(this.dart);
+  }
+
+  /** @returns {number} - fifth quantile */
+  get perc05(): number {
+    return api.grok_Stats_Get_PERC05(this.dart);
+  }
+
+  /** @returns {number} - tenth quantile */
+  get perc10(): number {
+    return api.grok_Stats_Get_PERC10(this.dart);
+  }
+
+  /** @returns {number} - ninetieth quantile */
+  get perc90(): number {
+    return api.grok_Stats_Get_PERC90(this.dart);
+  }
+
+  /** @returns {number} - ninety fifth quantile */
+  get perc95(): number {
+    return api.grok_Stats_Get_PERC95(this.dart);
+  }
+
+  /** @returns {number} - ninety ninth quantile */
+  get perc99(): number {
+    return api.grok_Stats_Get_PERC99(this.dart);
+  }
+
+
 
   /** Pearson correlation
    * @param {Column} otherColumn

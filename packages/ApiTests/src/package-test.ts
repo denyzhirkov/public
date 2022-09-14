@@ -1,6 +1,7 @@
 import * as DG from 'datagrok-api/dg';
 import * as grok from 'datagrok-api/grok';
 import './dataframe/dataframe';
+import './stats/stats';
 import './dataframe/detector';
 import './dataframe/calculated-columns';
 import './dataframe/events';
