@@ -75,6 +75,16 @@ To connect a database, follow these steps:
 * [Parametrize query](databases.md/#parameterize-a-query)
 * [Postprocess query results](databases.md/#postprocess-query-results)
 
+> Key concept: _query_, _parametrized query_
+>
+>_Queries_ are Datagrok [entities](../datagrok/objects.md), which means they can
+>also be used for sharing data with others and for enabling discovery by other
+>Datagrok users.
+>
+> _Queries_ are Datagrok [functions](../overview/functions/function.md), which
+> means they can also be parametrized. For details, see [Function parameters
+> enhancement](../overview/functions/func-params-enhancement.md).
+
 ### Query a database
 
 Once you connected a database, you can start querying it. To see a full list of
@@ -107,10 +117,10 @@ To query a table manually, follow these steps:
 
 To aggregate a table data, follow these steps:
 
-1. From the table's context menu, click **Visual Query…**. This action opens
-   the **Visual Query** form.
-1. To calculate an aggregate value of the column, add this column to the
-   **Measures** section:
+1. From the table's context menu, click **Visual Query…**. This action opens the
+   **Visual Query** form.
+1. To aggregate values of the column, add this column to the **Measures**
+   section:
 
    * Click the **Add an aggregation** icon next to **Measures**. This opens the
      context menu.
@@ -124,16 +134,22 @@ To aggregate a table data, follow these steps:
       > Note: You can change the aggregation parameter by right-clicking it and
       > selecting the new aggregation type and column.
 
-1. To group query results by column values, add this column to the **Rows**
-   section by clicking the **Add column to group the rows on** icon next to
-   **Rows**. <!--You can use more than one column as a key.-->
-1. To substitute the column values into the resulting columns, add this column
-   to the **Columns** section by clicking the **Add column to pivot on** icon
-   next to **Columns**.
-1. When finished, enter the query name. Then on the **Menu Ribbon**, click
-   **Save** to save the query to the Datagrok server.
+1. To summarize data by categories and subcategories, group query results by
+   corresponding columns’ values. Add these columns to the **Rows** section by
+   clicking the **Add column to group the rows on** icon next to  **Rows**.
+1. To see different summaries of the source data, move rows to columns. Add a
+   column to pivot on to the **Columns** section by clicking the corresponding
+   icon next to **Columns**.
+1. To filter the results, add column to the **Filters** section by clicking the
+   **Add a filter** icon next to  **Filters** and define the condition for
+   filtering. To write conditions use [Search
+   Patterns](../explore/data-search-patterns.md), for example: '>4' or '=US'.
+   The result of multiple filtering is an intersection of all conditions'
+   results.
+1. When finished, optionally edit the query name. Then on the **Menu Ribbon**,
+   click **Save** to save the query to the Datagrok server.
 
-GIF
+![Visual Qiery](databases-visual-query.gif)
 
 #### Join tables
 
@@ -144,13 +160,15 @@ the foreign keys.
 To join tables, follow these steps:
 
 1. From the table's context menu, click the **Build Query…**. This action opens
-   the  a **Query builder** dialog.
-1. Select columns of the tables and combine them with the other tables'
-   columns.
+   a **Query builder** dialog.
+1. On the right side of the dialog, select required columns from tables that the
+   platform automatically presented for joining. On the left side, the platform
+   immediately generates a SQL query, which you can edit. Datagrok
+   instantaneously shows the result of the query in the dataframe below.
 
-The result of the query appears instantaneously. And at any stage of building
-the query, you can add the results to the workspace. To do that, follow these
-steps:
+At any stage of building the query, you can continue interrogating its results
+by adding them to the workspace. To add the results of the query to the
+workspace, follow these steps:
 
 1. At the bottom of the **Query builder** window, click the context menu icon.
 1. Click **Add results to workspace**. The results appear in the dataframe in
@@ -160,12 +178,21 @@ To save a query to the Datagrok server, follow these steps:
 
 1. At the bottom of the **Query builder** window, click the context menu icon.
 1. Click **Save as query**. This opens a **Query View** window.
-1. Enter the query name.
+1. Optionally you can edit the SQL query or the query name.
 1. On the **Menu Ribbon**, click **Save**.
 
 GIF
 
+>Developers: You can create queries across multiple data sources by creating
+>separate queries which then should be used in a data job.
+
 ### Parameterize a query
+
+To start writing a new parametrized query, open **Query View** either: (1) from
+the table's context menu, by clicking **New SQL Query…** or (2) from the
+database's context menu, by clicking **Add query…**
+
+#### User case
 
 ### Postprocess query results
 
