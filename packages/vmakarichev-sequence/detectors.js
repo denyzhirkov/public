@@ -30,4 +30,11 @@ class VmakarichevSequencePackageDetectors extends DG.Package {
         col.semType = "dna_nucleotide";
         return col.semType;     
     }
+
+    //input: string str
+    //output: bool result
+    isPotentialENAId(str) {
+        // returns true, if name is of the form [A-Z]{2}[0-9]{6}
+       return (/[A-Z]{2}[0-9]{6}/.test(str) && (str.length == 6));
+     }
 }
