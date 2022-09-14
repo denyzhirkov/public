@@ -31,10 +31,24 @@ class VmakarichevSequencePackageDetectors extends DG.Package {
         return col.semType;     
     }
 
+
+    //tags: semTypeDetector
+    //input: column col
+    //output: string semType
+    detectENA(col) {   
+
+        return "ENA";     
+    }
+
     //input: string str
     //output: bool result
     isPotentialENAId(str) {
+        console.log(str);
+        console.log(/[A-Z]{2}[0-9]{6}/.test(str))
         // returns true, if name is of the form [A-Z]{2}[0-9]{6}
-       return (/[A-Z]{2}[0-9]{6}/.test(str) && (str.length == 6));
+      return (/^[A-Z]{2}[0-9]{6}/.test(str));
+
      }
+
+
 }
