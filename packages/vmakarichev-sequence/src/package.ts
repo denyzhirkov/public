@@ -51,6 +51,19 @@ return result;
   ]));
  }
 
+ //name: enaSequence
+ //tags: panel, widgets
+ //input: string cellText {semType: ENA}
+ //output: widget result
+ //condition: isPotentialENAId(cellText)
+ export async function enaSequence(cellText: string): Promise<DG.Widget<any>> {
+  const url = `https://www.ebi.ac.uk/ena/browser/api/fasta/${cellText}`;
+  const fasta = await (await grok.dapi.fetchProxy(url)).text();
+  //let box = ui.box(ui.divText(fasta));
+  /*grok.shell.newView('Box',[box]);*/
+  return new DG.Widget(ui.box(ui.divText(fasta)));
+}
+
 //name: countSubsequenceJS
 //language: javascript
 //input: dataframe sequences
