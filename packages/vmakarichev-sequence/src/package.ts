@@ -259,9 +259,9 @@ export function fuzzyJoin(df1: DG.DataFrame, df2: DG.DataFrame, N: number) {
 
 //name: enaSequence
  //tags: panel, widgets
- //input: string cellText {semType: ENA}
+ //input: string cellText
  //output: widget result
- //condition: true
+ //condition: isPotentialENAId(cellText)
  export async function enaSequence(cellText: string): Promise<DG.Widget<any>> {
   //const url = 'https://www.ebi.ac.uk/ena/browser/api/fasta/AA046425';
   //const fasta = await (await grok.dapi.fetchProxy(url)).text();
@@ -269,3 +269,113 @@ export function fuzzyJoin(df1: DG.DataFrame, df2: DG.DataFrame, N: number) {
   /*grok.shell.newView('Box',[box]);*/
   return new DG.Widget(ui.box(ui.divText("Hello, world!")));
 }
+
+ //name: _fetchENASequence 
+ //tags: panel, widgets
+ //input: string topic="influenza"
+ //input: int limit=1
+ //output: dataframe df
+ //condition: true
+ export async function _fetchENASequence (topic: string, limit: number): Promise<DG.DataFrame> {
+  let limitAsString = limit.toString();
+  let url = 'https://www.ebi.ac.uk/ena/browser/api/embl/textsearch?result=sequence&query='
+            + topic + '&limit=' +limitAsString;
+  //alert(url);
+  const fasta = await (await grok.dapi.fetchProxy(url)).text();
+
+  // Start of parsing
+
+  let first = 0; // fisrt index of the current subsequence
+  let last = 0; // last index ...
+  let lenOfFasta = fasta.length;
+
+  let arrayOfIDs = ["ID"];
+  let arrayOfSequences = ["Sequence"];
+
+  for(let indexOfCurrent = 0; indexOfCurrent < limit; indexOfCurrent++) {
+
+    // 1. Looking for the word "ID   "
+    last = first + 5;
+
+    let subseq = "";
+
+    while(last <= lenOfFasta) {
+      subseq = fasta.slice(first, last);
+      if( subseq == "ID   ")
+        break;
+      first++;
+      last++;
+    }
+
+    first = last;
+    last = first + 8; // ID is 2 capitals and 6 digits
+
+    arrayOfIDs.push(fasta.slice(first, last)); // push ID 
+
+    first = last;
+    
+
+    // 2. Looking for the word "other;", there is a sequence after this word 
+
+    last = first + 6;
+
+    while(last <= lenOfFasta) {
+      subseq = fasta.slice(first, last);
+      if( subseq == "other;")
+        break;
+      first++;
+      last++;
+    }
+
+    first = last + 6;
+    last = first + 65;
+
+    arrayOfSequences.push(fasta.slice(first, last));
+  }
+
+  arrayOfIDs.shift();
+  arrayOfSequences.shift();
+
+  let df = DG.DataFrame.fromColumns([
+    DG.Column.fromStrings("ID", arrayOfIDs),
+    DG.Column.fromStrings("Sequence", arrayOfSequences)
+  ]);
+
+  /*
+  // To show results
+
+  grok.shell.addTableView(df);
+  
+  let box = ui.box(ui.divText(fasta));
+  grok.shell.newView('Box',[box]);*/
+
+  return df;
+}
+
+//name: formENADataTable 
+export async function formENADataTable (): Promise<void> {
+
+  let df;
+
+  let dialog = ui.dialog({title: "Create sequences table"});
+  let queryInput = ui.stringInput('Query: ', 'influenza');
+  let limitInput = ui.intInput('How many rows: ', 40);
+
+  let button = ui.button("Preview", async() => {
+    df = await (_fetchENASequence(queryInput.stringValue, 3));
+    grok.shell.addTableView(df);
+  });
+
+  dialog.add(queryInput);
+  dialog.add(limitInput);
+  dialog.add(button);
+
+  dialog.onOK(async () => {
+    df = await (_fetchENASequence(queryInput.stringValue, limitInput.value!));
+    grok.shell.addTableView(df);
+  });
+
+  dialog.show();
+}
+
+

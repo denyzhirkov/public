@@ -35,6 +35,6 @@ class VmakarichevSequencePackageDetectors extends DG.Package {
     //output: bool result
     isPotentialENAId(str) {
         // returns true, if name is of the form [A-Z]{2}[0-9]{6}
-       return (/[A-Z]{2}[0-9]{6}/.test(str) && (str.length == 6));
+       return true; //(/[A-Z]{2}[0-9]{6}/.test(str) && (str.length == 6));
      }
 }
