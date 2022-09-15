@@ -131,6 +131,15 @@ export async function molfilePanel(helmString: string) {
   return ui.textInput('', await getMolfile(helmString));
 }
 
+//name: sequenceTooltip
+//tags: tooltip
+//input: column col {semType: Macromolecule}
+//output: widget result
+export async function sequenceTooltip(col: DG.Column) {
+  const tv = grok.shell.tv;
+  let viewer = await tv.dataFrame.plot.fromType('WebLogo', {sequenceColumnName: col.name});
+  return viewer;
+}
 
 //name: loadDialog
 export async function loadDialog() {
