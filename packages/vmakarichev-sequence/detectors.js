@@ -43,16 +43,8 @@ class VmakarichevSequencePackageDetectors extends DG.Package {
     //input: string str
     //output: bool result
     isPotentialENAId(str) {
-        console.log(str);
-        console.log(/[A-Z]{2}[0-9]{6}/.test(str))
-        // returns true, if name is of the form [A-Z]{2}[0-9]{6}
-<<<<<<< HEAD
-       return true; //(/[A-Z]{2}[0-9]{6}/.test(str) && (str.length == 6));
-=======
-      return (/^[A-Z]{2}[0-9]{6}/.test(str));
+        //console.log(str);
+        //console.log(/[A-Z]{2}[0-9]{6}/.test(str));
 
->>>>>>> 7d7ec7a5c0d86f7ea93da0c16aef39568fd25cd2
-     }
-
-
+        return (/^[A-Z]{2}[0-9]{6}/.test(str));}
 }

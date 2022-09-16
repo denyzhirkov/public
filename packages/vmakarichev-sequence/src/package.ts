@@ -275,21 +275,22 @@ export function fuzzyJoin(df1: DG.DataFrame, df2: DG.DataFrame, N: number) {
  //input: string cellText
  //output: widget result
  //condition: isPotentialENAId(cellText)
- export async function enaSequence(cellText: string): Promise<DG.Widget<any>> {
+ /*export async function enaSequence(cellText: string): Promise<DG.Widget<any>> {
   //const url = 'https://www.ebi.ac.uk/ena/browser/api/fasta/AA046425';
   //const fasta = await (await grok.dapi.fetchProxy(url)).text();
   //let box = ui.box(ui.divText(fasta));
-  /*grok.shell.newView('Box',[box]);*/
+  /*grok.shell.newView('Box',[box]);
   return new DG.Widget(ui.box(ui.divText("Hello, world!")));
-}
+}*/
 
  //name: _fetchENASequence 
  //tags: panel, widgets
  //input: string topic="influenza"
  //input: int limit=1
+ //input: int sequenceLength=1
  //output: dataframe df
  //condition: true
- export async function _fetchENASequence (topic: string, limit: number): Promise<DG.DataFrame> {
+ export async function _fetchENASequence (topic: string, limit: number, sequenceLength: number): Promise<DG.DataFrame> {
   let limitAsString = limit.toString();
   let url = 'https://www.ebi.ac.uk/ena/browser/api/embl/textsearch?result=sequence&query='
             + topic + '&limit=' +limitAsString;
@@ -321,7 +322,12 @@ export function fuzzyJoin(df1: DG.DataFrame, df2: DG.DataFrame, N: number) {
     }
 
     first = last;
-    last = first + 8; // ID is 2 capitals and 6 digits
+
+    last++;
+
+    while(fasta[last] != ';'){
+      last++;
+    }
 
     arrayOfIDs.push(fasta.slice(first, last)); // push ID 
 
@@ -339,15 +345,29 @@ export function fuzzyJoin(df1: DG.DataFrame, df2: DG.DataFrame, N: number) {
       first++;
       last++;
     }
+    
 
-    first = last + 6;
-    last = first + 65;
+    // 3. Detection of a sequence
 
-    arrayOfSequences.push(fasta.slice(first, last));
+    first = last + 6; // taking into account specifics of ENA text fles
+
+    last = first + 1;
+
+    while(fasta[last] != "/"){
+      last++;
+    }
+
+
+    // 4. Add the sequence found to the table
+
+    let sequenceLengthToBeAdded = Math.min(sequenceLength, last - first + 1); // set length of sequence to be added
+
+    arrayOfSequences.push(fasta.slice(first, first + sequenceLengthToBeAdded /*last*/) // push sequence
+         .replace(/[^a-z]/g, "").toUpperCase() ); // all non-letter symbols are removed and just upper case is used
   }
 
-  arrayOfIDs.shift();
-  arrayOfSequences.shift();
+  arrayOfIDs.shift(); // the first word ("ID") is removed
+  arrayOfSequences.shift(); // the first word ("Sequence") is removed
 
   let df = DG.DataFrame.fromColumns([
     DG.Column.fromStrings("ID", arrayOfIDs),
@@ -373,22 +393,27 @@ export async function formENADataTable (): Promise<void> {
   let dialog = ui.dialog({title: "Create sequences table"});
   let queryInput = ui.stringInput('Query: ', 'influenza');
   let limitInput = ui.intInput('How many rows: ', 40);
+  let sequenceLengthInput = ui.intInput('Sequence length: ', 60);
 
   let button = ui.button("Preview", async() => {
-    df = await (_fetchENASequence(queryInput.stringValue, 3));
+    df = await (_fetchENASequence(queryInput.stringValue, 3, sequenceLengthInput.value!));
+    df.name = "ENA data preview";
     grok.shell.addTableView(df);
   });
 
   dialog.add(queryInput);
   dialog.add(limitInput);
+  dialog.add(sequenceLengthInput);
   dialog.add(button);
 
   dialog.onOK(async () => {
-    df = await (_fetchENASequence(queryInput.stringValue, limitInput.value!));
+    df = await (_fetchENASequence(queryInput.stringValue, limitInput.value!, sequenceLengthInput.value!));
+    df.name = "ENA data";
     grok.shell.addTableView(df);
   });
 
   dialog.show();
 }
+
 
 
