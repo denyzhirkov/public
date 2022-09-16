@@ -73,14 +73,14 @@ To use lists as inputs to the queries, consider the following transformation:
 For example, here is how we can transform a query to `northwind` taking a single `string`
 parameter for a country:
 
-```
+```sql
 --input: string country
 select * from customers where country = @country
 ```
 
 into a query taking a comma-separated list of countries:
 
-```
+```sql
 --input: list<string> countries
 select * from customers where country = ANY(@countries)
 ```
