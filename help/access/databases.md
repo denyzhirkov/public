@@ -73,7 +73,7 @@ To connect a database, follow these steps:
   * Write a SQL query
   * Create an aggregation query
   * Build a query for multiple tables
-* [Parametrize query](databases.md/#parameterize-a-query)
+* [Parameterize query](databases.md/#parameterize-a-query)
 * [Postprocess query results](databases.md/#postprocess-query-results)
 
 ### Query a database
@@ -234,14 +234,14 @@ To parametrize a query you can add:
 
 Using input parameters in Datagrok, you can:
 
-* [Set default parameter value](databases.md/#set-default-value-for-a-parameter)
+* [Set default parameter value](databases.md/#set-default-parameter-value)
 * Use filtering criteria as inputs by [specifying parameter
-  patterns](databases.md/#specify-parameter-pattern))
+  patterns](databases.md/#specify-parameter-pattern)
 * [Use lists as inputs](databases.md/#use-lists-as-inputs)
 * [Define choices and
-  suggestions](databases.md/#predefine-choices-and-suggestions) for a parameter
+  suggestions](databases.md/#define-choices-and-suggestions) for a parameter
   value
-* [Reuse input parameters](databases.md/#re-use-input-parameters)
+* [Reuse input parameters](databases.md/#reuse-input-parameters)
 
 Use the following syntax  for query `input` parameters:
 
