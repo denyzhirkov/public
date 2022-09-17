@@ -433,6 +433,47 @@ GIF-->
 
 ### Postprocess query results
 
+Datagrok supports postprocessing of query results via transformations. The
+platform stores all data transformations done via the UI as macros and can
+reproduce them.
+
+To start the transformation of query results, open the transformation editor
+following these steps:
+
+> Note: If you edit a query in a **Query View** or **Visual Query** form, skip
+> to step 5.
+
+1. From the main menu on the left, click **Data** > **Databases**. This action
+   shows a list of available connectors.
+1. To view a list of available database connections, expand the connector.
+1. To see the queries, expand the database connection.
+1. From the query's context menu, click **Edit…**. A **Query View** with SQL
+   query or **Visual Query** form opens.
+1. At the top of the opened form, click **Transformations**. This action opens
+   the transformation editor.
+   > Note: To get back to the query editor, at the top of the form, click
+   > **Query**.
+
+On the left side of the transformation editor, you can see transformation steps.
+You can add steps manually and switch between them to view the results on each
+step. For each step, you can perform the following actions:
+
+* Create a transformation step by editing the table with UI or choosing the
+  function from the right side of the transformation editor.
+* Edit transformation function parameters. To see the parameters expand the
+  step.
+* Delete the transformation step.
+
+On the right side of the transformation editor, you can see a list of functions
+applicable to the query results. To find a function easily, on the left of the
+function list, use tags. To apply a function to the query result, click it and
+fill in the parameters.
+> Developers: you can write a script that accepts a table and produces a table
+> and use this script as a transformation step.
+
+When finished, to save the transformation, on the **Menu Ribbon**,  click
+**Save**.
+
 ## Database Manager
 
 ## Managing database connections
