@@ -82,10 +82,11 @@ Once you create a connection to the database, you can start querying it. To see
 a full list of available options, follow these steps:
 
 1. From the main menu on the left, click **Data** > **Databases**. This action
-   opens the tree of the connectors.
-1. Expand the appropriate connector and the database connection you need.
-1. To access database’s tables, depending on connector expand  **Schemas** or
-   **Schemas** > **public**.
+   shows a list of available connectors.
+1. Expand the connector and then the database connection from the list of
+   connections available to you.
+1. Depending on the connector, to access database’s tables,  expand  **Schemas**
+   or **Schemas** > **public**.
 1. Right-click the table. Alternatively, on the **Property pane**, either click
    the drop-down arrow next to the table name or expand the **Actions** info
    panel.
@@ -106,10 +107,11 @@ Subject to your permissions, you can choose to:
 To query a table manually, follow these steps:
 
 1. From the main menu on the left, click **Data** > **Databases**. This action
-   opens the tree of the connectors.
-1. Expand the appropriate connector and the database connection you need.
-1. To access database’s tables, depending on connector expand  **Schemas** or
-   **Schemas** > **public**.
+   shows a list of available connectors.
+1. Expand the connector and then the database connection from the list of
+   connections available to you.
+1. Depending on the connector, to access database’s tables,  expand  **Schemas**
+   or **Schemas** > **public**.
 1. From the table's context menu, click **New SQL Query…**. The **Query View**
    opens.
 1. In the **Query View**, write the SQL query.
@@ -121,10 +123,11 @@ To query a table manually, follow these steps:
 To aggregate a table data, follow these steps:
 
 1. From the main menu on the left, click **Data** > **Databases**. This action
-   opens the tree of the connectors.
-1. Expand the appropriate connector and the database connection you need.
-1. To access database’s tables, depending on connector expand  **Schemas** or
-   **Schemas** > **public**.
+   shows a list of available connectors.
+1. Expand the connector and then the database connection from the list of
+   connections available to you.
+1. Depending on the connector, to access database’s tables,  expand  **Schemas**
+   or **Schemas** > **public**.
 1. From the table's context menu, click **Visual Query…**. This action opens the
    **Visual Query** form.
 1. To aggregate values of the column, add this column to the **Measures**
@@ -168,10 +171,11 @@ the foreign keys.
 To join tables, follow these steps:
 
 1. From the main menu on the left, click **Data** > **Databases**. This action
-   opens the tree of the connectors.
-1. Expand the appropriate connector and the database connection you need.
-1. To access database’s tables, depending on connector expand  **Schemas** or
-   **Schemas** > **public**.
+   shows a list of available connectors.
+1. Expand the connector and then the database connection from the list of
+   connections available to you.
+1. Depending on the connector, to access database’s tables,  expand  **Schemas**
+   or **Schemas** > **public**.
 1. From the table's context menu, click the **Build Query…**. This action opens
     a **Query builder** dialog.
 1. On the right side of the dialog, select required columns from tables that the
@@ -202,146 +206,161 @@ GIF
 ### Parameterize a query
 
 Queries are Datagrok [functions](../overview/functions/function.md), which means
-they can also be parametrized. For details, see [Function parameters
+they can also be parameterized. For details, see [Function parameters
 enhancement](../overview/functions/func-params-enhancement.md).
 
 To create a parametrized query, follow these steps:
 
 1. From the main menu on the left, click **Data** > **Databases**. This action
-   opens the tree of the connectors.
-1. Expand the appropriate connector and the database connection you need.
-1. To access database’s tables, depending on connector expand  **Schemas** or
-   **Schemas** > **public**.
-1. From the table's context menu, click **New SQL Query…**. Alternatively, from
-   the database's context menu, click **Add query…**. A **Query View** opens.
-1. Annotate parameters in the query header using SQL/Sparql comments:
-
-* `--` for SQL
-* `#` for Sparql
+   shows a list of available connectors.
+1. Expand the connector and then the database connection from the list of
+   connections available to you.
+1. Depending on the connector, to access database’s tables,  expand  **Schemas**
+   or **Schemas** > **public**.
+1. To create a query, from the table's context menu, click **New SQL Query…**.
+   Alternatively, from the database's context menu, click **Add query…**. A
+   **Query View** opens.
+1. Add parameters in the query header.
 
 >Note: The syntax for defining query parameters is based on
 >[scripting](../compute/scripting.md) with additions specific to queries.
 
-To parametrize a query you can annotate:
+To parametrize a query you can add:
 
-* [input parameters](databases.md/#input-parameters)
-* [output parameters](databases.md/#output-parameters)
+* [Input parameters](databases.md/#input-parameters)
+* [Output parameters](databases.md/#output-parameters)
 
 #### Input parameters
 
 Using input parameters in Datagrok, you can:
 
-* [Set default value for a
-  parameter](databases.md/#set-default-value-for-a-parameter)
-* Specify a filtering criteria as input ([use parameter
+* [Set default parameter value](databases.md/#set-default-value-for-a-parameter)
+* Use filtering criteria as inputs by [specifying parameter
   patterns](databases.md/#specify-parameter-pattern))
 * [Use lists as inputs](databases.md/#use-lists-as-inputs)
-* [Predefine choices and
+* [Define choices and
   suggestions](databases.md/#predefine-choices-and-suggestions) for a parameter
   value
-* [Re-use input parameters](databases.md/#re-use-input-parameters)
+* [Reuse input parameters](databases.md/#re-use-input-parameters)
 
-Use the following format for query `input` parameters:
+Use the following syntax  for query `input` parameters:
 
 ```sql
 --input: <type> <name> = <value> {<option>: <value>; ...} [<description>]
 ```
 
-For the parameters' supported types, see [supported
+> Note: To see the list of supported parameter types, see [Supported parameter
 types](parameterized-queries.md/#supported-types).
 
-For example, to parametrize argument `freight` in the following query applicable
-to the "Northwind" database
+Let's consider an example of using parameters. The following query selects all
+rows from the table `orders` where the value of the argument `freight` is
+greater than 10:
 
 ```sql
-select * from Orders where freight>=10
+select * from public.orders where freight>=10
 ```
 
-annotate the parameter `freight` as follows:
+To receive selections with different `freight` values without rewriting the
+query each time, parameterize the argument `freight` as follows:
 
 ```sql
 --input: double freight  
-select * from Orders where freight>=@freight
+select * from public.orders where freight>=@freight
 ```
 
-##### Set default value for a parameter
+While executing a parameterized query, Datagrok dynamically generates a UI so
+you can set different parameter values.
 
-To set default value for a parameter, set `<value>` after `<name>`. In the
-following example, `10.0` is the default value for parameter ` freight `:
+![Executing a parameterized query](add-parameter.gif)
+
+##### Set default parameter value
+
+To set the default parameter value, in the following template for parameters,
+specify`<value>`:  
 
 ```sql
---input: double freight = 10.0 
-select * from Orders where freight>=@freight
+--input: <type> <name> = <value>
 ```
+
+In the following example, `10.0` is the default value for parameter ` freight `:
+
+```sql
+--input: double freight = 10.0
+select * from public.orders where freight>=@freight
+```
+
+![Set default parameter value](the-default-value.gif)
 
 ##### Specify parameter pattern
 
 To use filtering criteria as free text in a parameter input, specify a pattern
-for this parameter. The Datagrok server parses such a query and safely
-transforms it into a proper SQL clause. For details about using filtering
-criteria, see [search patterns](../explore/data-search-patterns.md).
+for this parameter. For details about using filtering criteria, see [Search
+patterns](../explore/data-search-patterns.md).
 
-To specify parameter pattern, follow these steps:
+To specify parameter pattern, use the following syntax:
 
-1. After `--input:`, specify the input type as `string`. The `string` type of
-   the input lets the user enter free-text filtering criteria.
-1. In the `pattern` option after the default value, specify the actual data
-   type.
-1. In the dependent query, use the reference `@<patternName>(columnName)` to
-   specify a pattern that the server evaluates against the specified column.
+```sql
+--input: string  <patternName> = <defaultValue> {pattern: <columnType>} 
+```
+
+ In the dependent query, use the reference `@<patternName>(columnName)` to
+ specify a pattern.
+
+The type `string` of `<patternName>` lets you enter free-text filtering criteria
+in UI. In the `pattern` option after the `<defaultValue>`, specify the actual
+data type.
 
 In the following example, `@freightValue(freight)` transforms into `freight >
 200.0` when a value for `freightValue` is specified as `> 200.0`:
 
 ```sql
---input: string freightValue = >= 10.0 {pattern: double}
-select * from Orders where @freightValue(freight)
+--input: string freightValue = 10.0 {pattern: double}
+select * from public.orders where @freightValue(freight)
 ```
 
-GIF
+![Specify parameter pattern](parameter-pattern.gif)
 
-Datagrok  supports `datetime` type as well:
-
-```sql
---input: string orderDate = "after 1/1/1995" {pattern: datetime}
-select * from orders where @orderDate(orderDate)
-```
-
-See [patterns summary](parameterized-queries.md/#patterns-summary) for the
-details.
+To learn more about filtering criteria for different data types, see [Patterns
+summary](parameterized-queries.md/#patterns-summary).
 
 Learn more about parameter patterns from this video: [Parameterized database
 queries](https://www.youtube.com/watch?v=sSJp5CXcYKQ).
 
 ##### Use lists as inputs
 
-To use lists as inputs to the queries, consider the following transformation:
+To use lists as inputs to the queries, use the following syntax:
 
-1. After `--input:`, specify `list<T>` as a type of a parameter.
-    >Note: `T` is the type of list elements.
-2. Inside the SQL query before `@<parameter name>`, use `= ANY` operator: `=
-   ANY(@<parameter name>)`, or a similar operator with an alternative selection
-   of the comparison type, such as `>= ANY` or `< ANY`.
+```sql
+--input: list<[listElementsType]> <parameterName>
+```
 
-For example, you can transform a query applicable to the "Northwind" database
-taking a single `string` parameter for a country:
+Inside the SQL query before `@<parameterName>`, use `= ANY` operator: `=
+ANY(@<parameter name>)`. As another option, you can use an operator with an
+alternative selection of the comparison type, such as `>= ANY` or `< ANY`.
+
+For example, you can transform a query taking a single `string` parameter for a
+country:
 
 ```sql
 --input: string country
-select * from customers where country = @country
+select customers.contactname, customers.country
+from public.customers where country = @country
 ```
 
 into a query taking a comma-separated list of countries:
 
 ```sql
 --input: list<string> countries
-select * from customers where country = ANY(@countries)
+select customers.contactname, customers.country
+from public.customers where country = ANY(@countries)
 ```
+
+![Use lists as inputs](list.gif)
 
 Learn more about using the lists feature form this video: [Lists in
 parameterized queries](https://www.youtube.com/watch?v=meRAEF7ogtw).
 
-##### Predefine choices and suggestions
+##### Define choices and suggestions
 
 Options for supported types are described in the
 [Scripting](../compute/scripting.md) section.
@@ -361,14 +380,14 @@ Examples of the `choices` and `suggestions` usage for the parameter
 --input: string shipCountry = "France" {suggestions: Demo:northwind:countries}
 ```
 
-##### Re-use input parameters
+##### Reuse input parameters
 
 It's possible to re-use one or more existing input parameters as values inside
 parameters' `choices` queries, for example:
 
 ```sql
 --input: string firstLetter = "F"
---input: string shipCountry = "France" {choices: Query("SELECT DISTINCT shipCountry FROM Orders WHERE shipCountry LIKE @firstLetter || '%')} 
+--input: string shipCountry = "France" {choices: Query("SELECT DISTINCT shipCountry FROM Orders WHERE shipCountry LIKE @firstLetter || '%')}
 SELECT * FROM Orders WHERE (shipCountry = @shipCountry)
 ```
 
@@ -389,11 +408,12 @@ package, the following query outputs a string of the semantic type `Molecule`:
 --output: string smiles {semType: Molecule}
 ```
 
-#### Examples
+<!--#### Examples
 
+In the following example the query selects all rows from the table `orders` where
 ```sql
 --input: int employeeId = 5
---input: string shipVia = = 3 {pattern: int}
+--input: string shipVia = 3 {pattern: int}
 --input: double freight = 10.0
 --input: string shipCountry = "France" {choices: Query("SELECT DISTINCT shipCountry FROM Orders")}
 --input: string shipCity = "starts with r" {pattern: string}
@@ -409,8 +429,7 @@ SELECT * FROM Orders WHERE (employeeId = @employeeId)
     AND @orderDate(orderDate)
     AND (requiredDate >= @requiredDate)
 ```
-
-GIF
+GIF-->
 
 ### Postprocess query results
 
