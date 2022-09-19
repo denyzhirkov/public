@@ -293,7 +293,7 @@ you can set different parameter values.
 ##### Set default parameter value
 
 To set the default parameter value, in the following template for parameters,
-specify`<value>`:  
+specify `<value>`:  
 
 ```sql
 --input: <type> <name> = <value>
@@ -534,14 +534,8 @@ To share an item, do the following:
 
 1. Right-click the item and select **Share…**  from the context menu. This
    action opens the **Share...** dialog.
-1. Enter the user or user group you want to share it with.
-  
-   In the identity/email field, start typing a person’s name, username, email,
-   or group name. Pick from the list of the matching identities.
-
-1. From the respective dropdowns, select access privileges. You can select any
-   or all of the following options<!--TBU-->:
-
+1. Enter the user or user group you want to share it with. In the identity/email field, start typing a person’s name, username, email, or group name. Pick from the list of the matching identities.
+1. From the respective dropdowns, select access privileges. You can select any or all of the following options<!--TBU-->:
     * _Can view_: Users can view, open, and run (for queries)
     * _Can edit_: Users can rename and edit
     * _Can delete_: Users can delete
