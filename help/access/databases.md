@@ -1,8 +1,8 @@
 # Databases
 
-Database Manager lets you connect databases and work with them on your system
-from the convenience of your web browser. To open Database Manager, from the
-main menu, select **Data** > **Databases**.
+ Datagrok lets you connect databases and work with them on your system from the
+ convenience of your web browser via **Database Manager**. To open **Database
+ Manager**, from the main menu, select **Data** > **Databases**.
 
 In this article:
 
