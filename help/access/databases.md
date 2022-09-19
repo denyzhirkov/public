@@ -1,14 +1,20 @@
 # Databases
 
+Database Manager lets you connect databases and work with them on your system
+from the convenience of your web browser. To open Database Manager, from the
+main menu, select Data>Databases.
+
 In this article:
 
 * [Data access](databases.md/#accessing-databases)
 * [Queries](databases.md/#queries)
-* Database Manager
-* [Managing database connections](databases.md/#managing-database-connections)
-* [Managing content within a database
-  connection](databases.md/#managing-file-shares)
-* [Sharing content](databases.md/#sharing-content)
+* [Sharing database connections and
+  queries](databases.md/#sharing-database-connections-and-queries)
+* [Manage shares](databases.md/#manage-shares)
+* [Managing database connections and
+  queries](databases.md/#managing-database-connections-and-queries)
+* [Customizations](databases.md/#customizations)
+* [Automation](databases.md/#automation)
 
 ## Accessing databases
 
@@ -21,9 +27,13 @@ Datagrok lets you access databases in a secure and manageable way.
 > databases, including PostgreSQL, MySQL, MS SQL, Maria DB, Oracle, and others.
 > A _database connection_ allows authorized users to access and query databases.
 >
->_Connections_ are Datagrok [entities](../datagrok/objects.md), which means they
->can also be used for sharing data with others and for enabling discovery by
->other Datagrok users.
+> _Database connections_ are Datagrok [entities](../datagrok/objects.md), which
+> means you can perform a standard set of operations against them (for example,
+> annotate, set access privileges, [use in automation
+> workflows](data-pipeline.md), or enable discovery by other Datagrok users).
+>
+> Note: For enterprise users, the Datagrok administrator defines which database
+> connections you can access and which privileges you have in them.
 
 ### Supported connectors
 
@@ -34,9 +44,9 @@ connectors]( connectors/supported-connectors.md).
 > Developers: You can also extend the platform by [creating custom
 > connectors](https://github.com/datagrok-ai/public/tree/master/connectors).
 
-### Connect a database
+### Add new database connection
 
-To connect a database, follow these steps:
+To add a database connection, follow these steps:
 
 1. From the main menu on the left, click **Data** > **Databases**.
 1. Open the **Add new connection** dialog by either: (1) expanding the
@@ -66,6 +76,16 @@ To connect a database, follow these steps:
 1. Click **TEST** to the connection, then click **OK** to save it.
 
 ![Create a connection](database-connection.gif)
+
+### Modify a database connection
+
+You can modify a database connection at any time. To modify a connection:
+
+1. Right-click the connection to open its context menu, then click **Edit...**.
+   This action opens the **Edit Connection** dialog.
+1. In the **Edit Connection** dialog, change the connection name,  parameters,
+   and credentials as needed.
+1. Click **TEST** to the connection, then click **OK** to save the changes.
 
 ## Queries
 
@@ -238,9 +258,8 @@ Using input parameters in Datagrok, you can:
 * Use filtering criteria as inputs by [specifying parameter
   patterns](databases.md/#specify-parameter-pattern)
 * [Use lists as inputs](databases.md/#use-lists-as-inputs)
-* [Define choices and
-  suggestions](databases.md/#define-choices-and-suggestions) for a parameter
-  value
+* [Define choices and suggestions](databases.md/#define-choices-and-suggestions)
+  for a parameter value
 * [Reuse input parameters](databases.md/#reuse-input-parameters)
 
 Use the following syntax  for query `input` parameters:
@@ -408,18 +427,41 @@ package, the following query outputs a string of the semantic type `Molecule`:
 --output: string smiles {semType: Molecule}
 ```
 
-<!--#### Examples
+#### Example
 
-In the following example the query selects all rows from the table `orders` where
+The following example is applicable to the database `northwind`. The query
+selects all rows from the table `Orders` where:
+
+* `employeeId` by default equals 5, you can set an integer value.
+* `shipVia` by default equals 3, you can use filtering criteria for an integer
+  parameter.
+* `freight` by default equals 10.0, you can set a value of type `double`.
+* `shipCountry` by default equals "France", you can choose from the given
+  `choices`.
+* `shipCity` by default contains r in its name, you can use filtering criteria
+  for a parameter of type `string`.
+* `freightLess1000` by default is true, you can switch as a boolean value.
+* `requiredDate` by default is 1/1/1995, you can set another date.
+* `orderDate` by default is after 1/1/1995, you can use filtering criteria for a
+  parameter of type `datetime`.
+
+To learn more about filtering criteria for different data types, see [Patterns
+summary](parameterized-queries.md/#patterns-summary).
+
 ```sql
+--name: PostgresqlOrders
+--friendlyName: Orders
+--connection: PostgreSQLNorthwind
+--tags: unit-test
 --input: int employeeId = 5
 --input: string shipVia = 3 {pattern: int}
 --input: double freight = 10.0
 --input: string shipCountry = "France" {choices: Query("SELECT DISTINCT shipCountry FROM Orders")}
---input: string shipCity = "starts with r" {pattern: string}
+--input: string shipCity = "contains r" {pattern: string}
 --input: bool freightLess1000 = true
 --input: datetime requiredDate = "1/1/1995"
 --input: string orderDate = "after 1/1/1995" {pattern: datetime}
+
 SELECT * FROM Orders WHERE (employeeId = @employeeId)
     AND (freight >= @freight)
     AND @shipVia(shipVia)
@@ -429,7 +471,8 @@ SELECT * FROM Orders WHERE (employeeId = @employeeId)
     AND @orderDate(orderDate)
     AND (requiredDate >= @requiredDate)
 ```
-GIF-->
+
+GIF
 
 ### Postprocess query results
 
@@ -474,28 +517,110 @@ fill in the parameters.
 When finished, to save the transformation, on the **Menu Ribbon**,  click
 **Save**.
 
-## Database Manager
+## Sharing database connections and queries
 
-## Managing database connections
+Share database connections and queries with individual users and groups directly
+from the **Database Manager**. You can specify access privileges for each shared
+database connection or query. Once the item is shared, it appears in the
+recipient's **Database Manager**.
 
-## Managing content within a database connection
+To access the query, users must have access privileges for the database
+connection that contains this query.
 
-## Sharing content
+### Share database connections and queries
+
+When your access privileges allow it, you can share database connections and
+queries available to you.
+
+To share an item, do the following:
+
+1. Right-click the item and select **Share…**  from the context menu. This
+   action opens the **Share...** dialog.
+1. Enter the user or user group you want to share it with.
+  
+   In the identity/email field, start typing a person’s name, username, email,
+   or group name. Pick from the list of the matching identities.
+
+1. From the respective dropdowns, select access privileges. You can select any
+   or all of the following options<!--TBU-->:
+
+    * _Can view_: Users can view, open, and run (for queries)
+    * _Can edit_: Users can rename and edit
+    * _Can delete_: Users can delete
+    * _Can share_: Users can reshare with any other user or group.
+1. You may also notify the users you share with. If you don’t want to send a
+   notification, uncheck the **Send notification** checkbox.
+
+   > Note: To send an email notification, enter the user's email in the
+   > identity/email field. The email notification contains a link to the shared
+   > item and entered description. If you enter a user or group name, they will
+   > be notified via the Datagrok interface.
+
+1. Click **OK** to share. Once shared, the shared item appears in the
+   recipient's **Folder Tree**.
+
+GIF
+
+## Manage shares
+
+Subject to your privileges, you can use the **Data Explorer** panel to inspect
+and quickly adjust access permissions to database connections and queries, send
+comments to those you're sharing with, and more.
+
+1. First, select the database connection or query.
+1. Then navigate to **Data Explorer** on the left and expand the **Sharing**
+   info panel to see the complete list of users with access and their
+   privileges. From here, you can click any user or group to see their profile,
+   your conversation history with them, send them a note, and more.
+1. Use the buttons provided to share access with more users, revoke access, or
+   edit permissions to the shared item.
+
+    >Note: The same actions are available from the context menu.
+
+GIF pending changes in the UI
+
+## Managing database connections and queries
+
+The **Database Manager** lets you perform standard actions with database
+connections and queries such as edit, share, delete, etc. To see a complete list
+of available actions, right-click the database connection or query.
+
+>Tip: The same list of actions is available from the **Data Explorer** on the
+>right under the **Actions** info panel.
+
+Depending on your privileges, certain actions may not be available to you. For
+database connections and queries shared with you, contact the _credentials
+owner_. If you are a _credentials owner_, contact the _data source_ owner.
+
+## Customizations
+
+Fundamentally, Datagrok is designed as an extensible environment. Datagrok
+extensions can customize or enhance any part of Datagrok. You can provide custom
+UI, functions, or [cell renderers](../develop/how-to/custom-cell-renderers.md)
+for rich preview. You can add new data types and extract organization-specific
+metadata. Extensions can add items to the menus and [context
+actions](../develop/how-to/context-actions.md), and so much more.
+
+To learn more about extensions, see [Extending and customizing
+Datagrok](../develop/extending-and-customizing.md).
+
+## Automation
+
+Any action performed in **Database Manager** is reproducable and can be used in
+automation workflows. For example, you can use data preparation pipeline to
+define jobs for data ingestion, postprocessing, and transformations.
+
+To learn more about automating workflows usung data preparation pipelines, see
+[Data preparation pipeline](data-pipeline.md).
 
 ## Resources
+
+See also:
+
+* [File shares](file-shares.md)
+* Web services
 
 ## Videos
 
 [![Parameterized queries](../uploads/youtube/data_access.png "Open on
-Youtube")](https://www.youtube.com/watch?v=dKrCk38A1m8&t=1980s)
-
-[YouTube: Datagrok database parameterized
-queries](https://www.youtube.com/watch?v=sSJp5CXcYKQ&ab_channel=Datagrok)
-
-See also:
-
-* [Search patterns](../explore/data-search-patterns.md)
-* [Function](../datagrok/functions/function.md)
-* [Scripting](../compute/scripting.md)
-* [JavaScript API
-  Samples](https://public.datagrok.ai/js/samples/data-access/parameterized-query)
+Youtube")](https://www.youtube.com/watch?v=dKrCk38A1m8&t=1048s)
