@@ -29,8 +29,7 @@ Datagrok lets you access databases in a secure and manageable way.
 >
 > _Database connections_ are Datagrok [entities](../datagrok/objects.md), which
 > means you can perform a standard set of operations against them (for example,
-> annotate, set access privileges, [use in automation
-> workflows](data-pipeline.md), or enable discovery by other Datagrok users).
+> annotate, set access privileges, or enable discovery by other Datagrok users).
 >
 > Note: For enterprise users, the Datagrok administrator defines which database
 > connections you can access and which privileges you have in them.
@@ -62,15 +61,15 @@ To add a database connection, follow these steps:
    > parameter **Conn. string**. In this case, you don’t need to fill in other
    > parameters except for **Login** and **Password**.
    >
-   >You can enter _credentials_ (typically, login/password) manually. When entered
-   >manually, Datagrok stores secrets in a secure [privilege management
+   >You can enter _credentials_ (typically, login/password) manually. When
+   >entered manually, Datagrok stores secrets in a secure [privilege management
    >system](/govern/security.md/#credentials). You can also set up a connection
    >using Datagrok's integration with the AWS Secrets Manager (see [Secrets
    >Managers](/access/data-connection-credentials.md/#secrets-managers) for
    >details).
    >
-   >To define who can change the connection credentials, make a selection from the
-   >**Credential owner** dropdown.
+   >To define who can change the connection credentials, make a selection from
+   >the **Credential owner** dropdown.
 1. Click **TEST** to the connection, then click **OK** to save it.
 
 ![Create a connection](database-connection.gif)
@@ -293,7 +292,7 @@ you can set different parameter values.
 ##### Set default parameter value
 
 To set the default parameter value, in the following template for parameters,
-specify `<value>`:  
+specify `<value>`:
 
 ```sql
 --input: <type> <name> = <value>
@@ -534,8 +533,11 @@ To share an item, do the following:
 
 1. Right-click the item and select **Share…**  from the context menu. This
    action opens the **Share...** dialog.
-1. Enter the user or user group you want to share it with. In the identity/email field, start typing a person’s name, username, email, or group name. Pick from the list of the matching identities.
-1. From the respective dropdowns, select access privileges. You can select any or all of the following options<!--TBU-->:
+1. Enter the user or user group you want to share it with. In the identity/email
+   field, start typing a person’s name, username, email, or group name. Pick
+   from the list of the matching identities.
+1. From the respective dropdowns, select access privileges. You can select any
+   or all of the following options<!--TBU-->:
     * _Can view_: Users can view, open, and run (for queries)
     * _Can edit_: Users can rename and edit
     * _Can delete_: Users can delete
