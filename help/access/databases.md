@@ -2,7 +2,7 @@
 
 Database Manager lets you connect databases and work with them on your system
 from the convenience of your web browser. To open Database Manager, from the
-main menu, select Data>Databases.
+main menu, select **Data** > **Databases**.
 
 In this article:
 
@@ -111,7 +111,7 @@ a full list of available options, follow these steps:
    the drop-down arrow next to the table name or expand the **Actions** info
    panel.
 
-GIF
+![Available commands](databases-context-menu.gif)
 
 Subject to your permissions, you can choose to:
 
