@@ -617,10 +617,10 @@ To learn more about automating workflows usung data preparation pipelines, see
 
 See also:
 
-* [File shares](file-shares.md)
+* File shares
 * Web services
 
 ## Videos
 
-[![Parameterized queries](../uploads/youtube/data_access.png "Open on
+[![Databases](../uploads/youtube/data_access.png "Open on
 Youtube")](https://www.youtube.com/watch?v=dKrCk38A1m8&t=1048s)
