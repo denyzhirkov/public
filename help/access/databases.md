@@ -56,23 +56,21 @@ To add a database connection, follow these steps:
    prompted. This action updates the dialog with connection-specific parameter
    fields.
 1. Fill in all dialog fields displayed.
-
->Notes:
->
-> If the connection requires a custom JDBC connection string, fill in the
-> parameter **Conn. string**. In this case, you don’t need to fill in other
-> parameters except for **Login** and **Password**.
->
->You can enter _credentials_ (typically, login/password) manually. When entered
->manually, Datagrok stores secrets in a secure [privilege management
->system](/govern/security.md/#credentials). You can also set up a connection
->using Datagrok's integration with the AWS Secrets Manager (see [Secrets
->Managers](/access/data-connection-credentials.md/#secrets-managers) for
->details).
->
->To define who can change the connection credentials, make a selection from the
->**Credential owner** dropdown.
-
+   >Notes:
+   >
+   > If the connection requires a custom JDBC connection string, fill in the
+   > parameter **Conn. string**. In this case, you don’t need to fill in other
+   > parameters except for **Login** and **Password**.
+   >
+   >You can enter _credentials_ (typically, login/password) manually. When entered
+   >manually, Datagrok stores secrets in a secure [privilege management
+   >system](/govern/security.md/#credentials). You can also set up a connection
+   >using Datagrok's integration with the AWS Secrets Manager (see [Secrets
+   >Managers](/access/data-connection-credentials.md/#secrets-managers) for
+   >details).
+   >
+   >To define who can change the connection credentials, make a selection from the
+   >**Credential owner** dropdown.
 1. Click **TEST** to the connection, then click **OK** to save it.
 
 ![Create a connection](database-connection.gif)
