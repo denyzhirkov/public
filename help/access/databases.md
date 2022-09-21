@@ -318,10 +318,11 @@ Using input parameters in Datagrok, you can:
   select * from Orders where @freightValue(freight)
    ```
 
-   Learn more about parameter patterns from this video: [Parameterized database
+   To learn more about filtering criteria for different data types, see
+[Patterns summary](parameterized-queries.md/#parameter-patterns-summary). Learn more about parameter patterns from this video: [Parameterized database
    queries](https://www.youtube.com/watch?v=sSJp5CXcYKQ).
 
-* Use lists as inputs. Use this syntax:
+* Use lists as inputs. The syntax is the following:
 
     ```sql
    --input: list<[listElementsType]> <parameterName>
@@ -341,8 +342,8 @@ Using input parameters in Datagrok, you can:
   Learn more about using the lists feature from this video: [Lists in
    parameterized queries](https://www.youtube.com/watch?v=meRAEF7ogtw).
 
-* Define choices and suggestions for a parameter value. Options for supported
-  types are described in the [Scripting](../compute/scripting.md) section.
+* Define choices and suggestions for a parameter value. To learn more about options for supported
+  types, see [Scripting](../compute/scripting.md).
 
    | Option        | Description                                                                       |
    |---------------|-----------------------------------------------------------------------------------|
@@ -358,8 +359,7 @@ Using input parameters in Datagrok, you can:
    --input: string shipCountry = "France" {suggestions: Demo:northwind:countries}
    ```
 
-* Reuse input parameters. It's possible to reuse one or more existing input
-  parameters as values inside parameters' `choices` queries, for example:
+* Reuse one or more existing input parameters as values inside parameters' `choices` queries, for example:
 
    ```sql
    --input: string firstLetter = "F"
@@ -428,7 +428,7 @@ The preceding query selects all rows from the table `Orders` where:
   parameter of type `datetime`.
 
 > Note: To learn more about filtering criteria for different data types, see
-[Patterns summary](parameterized-queries.md/#patterns-summary).
+[Patterns summary](parameterized-queries.md/#parameter-patterns-summary).
 
 Before executing a parameterized query, Datagrok dynamically generates a UI that
 lets you enter parameters.
