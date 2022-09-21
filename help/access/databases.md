@@ -59,9 +59,9 @@ To add a database connection, follow these steps:
    >
    >You can enter _credentials_ (typically, login/password) manually. When
    >entered manually, Datagrok stores secrets in a secure [privilege management
-   >system](/govern/security.md/#credentials). You can also set up a connection
+   >system](../govern/security.md/#credentials). You can also set up a connection
    >using Datagrok's integration with the AWS Secrets Manager (see [Secrets
-   >Managers](/access/data-connection-credentials.md/#secrets-managers) for
+   >Managers](data-connection-credentials.md/#secrets-managers) for
    >details).
    >
    >To define who can change the connection credentials, make a selection from
@@ -92,10 +92,10 @@ You can modify a database connection at any time:
 > a standard set of operations against them (for example, set access privileges
 > or enable discovery by other Datagrok users).
 >
-> _Queries_ are Datagrok [functions](../overview/functions/function.md), which
+> _Queries_ are Datagrok [functions](../datagrok/functions/function.md), which
 > means they can be parameterized, implemented in different ways and reused. For
 > details, see [Function parameters
-> enhancement](../overview/functions/func-params-enhancement.md).
+> enhancement](../datagrok/functions/func-params-enhancement.md).
 >
 > _Datagrok query_ belongs to the _database connection_ for which it is created.
 > It means you can’t share a _query_ without sharing a _connection_, and
