@@ -82,23 +82,24 @@ You can modify a database connection at any time:
 
 ## Queries
 
-> Key concept: _query_
+> Key concept: _Datagrok query_
 >
-> Datagrok provides _queries_ for retrieving data mainly for the [Exploratory
-> data analysis](../explore/exploratory-data-analysis.md), typically from a
-> relational database in a reproducible way. Also, Datagrok supports
-> _parameterized queries_ and provides tools for postprocessing _query_ results.
->
-> _Query_ belongs to the _database connection_ for which it was created.
+> Datagrok supports _querying_ data typically from relational databases.
+> Datagrok also supports _parameterized queries_ and provides tools for
+> postprocessing _query results_.
 >
 > _Queries_  are Datagrok [entities](../datagrok/objects.md), so you can perform
 > a standard set of operations against them (for example, set access privileges
 > or enable discovery by other Datagrok users).
 >
-> _Queries_  are Datagrok [functions](../overview/functions/function.md), which
+> _Queries_ are Datagrok [functions](../overview/functions/function.md), which
 > means they can be parameterized, implemented in different ways and reused. For
 > details, see [Function parameters
 > enhancement](../overview/functions/func-params-enhancement.md).
+>
+> _Datagrok query_ belongs to the _database connection_ for which it is created.
+> It means you can’t share a _query_ without sharing a _connection_, and
+> deleting a _connection_ also deletes a _query_.
 
 In this section:
 
@@ -114,10 +115,10 @@ In this section:
 Once you create a connection to the database, you can start querying it. In
 Datagrok, you have two querying methods:
 
-1. **Querying a database connection** available for any database connection. It
-   is the main way to create a query.
-1. **Querying a specific table** available for database connections that support
-   schemas so you can drill down to the table level.
+1. **Querying a database connection**. This method is available for any database
+   connection. It is the main way to create a query.
+1. **Querying a specific table**. This method is available for database
+   connections that support schema browsing.
 
 To **query a database connection**, follow these steps:
 
@@ -261,7 +262,7 @@ To save a query to the Datagrok server, follow these steps:
 1. Optionally, you can edit the SQL query or the query name.
 1. On the **Menu Ribbon**, click **Save**.
 
-GIF
+![Join tables](query-builder.gif)
 
 >Developers: You can create queries across multiple data sources by creating
 >separate queries, which then should be used in a data job.
@@ -275,10 +276,10 @@ For example, the following  SQL query defines a `freight` input parameter:
 
 ```sql
 --input: double freight  
-select * from public.orders where freight >= @freight
+select * from Orders where freight >= @freight
 ```
 
-To learn how to write a SQL query, see [Write a SQL
+To learn more about writing a SQL query, see [Write a SQL
 query](databases.md/#write-a-sql-query) section. To see the list of supported
 parameter types, see [Supported parameter
 types](parameterized-queries.md/#supported-types).
@@ -287,98 +288,87 @@ types](parameterized-queries.md/#supported-types).
 
 Using input parameters in Datagrok, you can:
 
-* Set default parameter value
-  
-  Syntax:
-  
-  ```sql
-  --input: <type> <name> = <value>
-  ```
-  
-  For example:
-  
-  ```sql
-  --input: double freight = 10.0
-  select * from public.orders where freight >= @freight
-  ````
+* Set default parameter value. Use this syntax:
 
-* Use filtering criteria as inputs by specifying parameter patterns
-  
-  Syntax:
-  
    ```sql
-  --input: string  <patternName> = <defaultValue> {pattern: <columnType>}
-  ```
-  
-  In the dependent query, use the reference `@<patternName>(columnName)` to
-  specify a pattern.
-  
-  For example:
-  
-  ```sql
-  --input: string freightValue = 10.0 {pattern: double}
-  select * from public.orders where @freightValue(freight)
-  ```
+   --input: <type> <name> = <value>
+   ```
 
-  Learn more about parameter patterns from this video: [Parameterized database
-  queries](https://www.youtube.com/watch?v=sSJp5CXcYKQ).
-  
-* Use lists as inputs
-  
-  Syntax:
-  
+   Example:
+
    ```sql
-  --input: list<[listElementsType]> <parameterName>
-  ```
+   --input: double freight = 10.0
+  select * from Orders where freight >= @freight
+   ````
   
-  Inside the SQL query before `@<parameterName>`, use `= ANY` operator: `=
-  ANY(@<parameter name>)`. As another option, you can use an operator with an
-  alternative selection of the comparison type, such as `>= ANY` or `< ANY`.
-  
-  For example:
-  
+* Use filtering criteria as inputs by specifying parameter patterns. Use this
+  syntax:
+
   ```sql
-  --input: list<string> countries
-  select customers.contactname, customers.country
-  from public.customers where country = ANY(@countries)
-  ```
-  
-  Learn more about using the lists feature form this video: [Lists in
-  parameterized queries](https://www.youtube.com/watch?v=meRAEF7ogtw).
-  
-* Define choices and suggestions for a parameter value
-  
-  Options for supported types are described in the
-  [Scripting](../compute/scripting.md) section.
-  
-  | Option        | Description                                                                       |
-  |---------------|-----------------------------------------------------------------------------------|
-  | `choices`     | A comma-separated list of values, a name of the query, or the actual SQL query    |
-  | `suggestions` | Name of the query to be called to generate suggestion as the user types the value |
-  
-  Examples of the `choices` and `suggestions` usage for the parameter
-  `shipCountry` are the following:
-  
-  ```sql
-  --input: string shipCountry = "France" {choices: ['France', 'Italy', 'Germany']}
-  --input: string shipCountry = "France" {choices: Query("SELECT DISTINCT shipCountry FROM Orders")}
-  --input: string shipCountry = "France" {choices: Demo:northwind:countries}
-  --input: string shipCountry = "France" {suggestions: Demo:northwind:countries}
-  ```
-  
-* Reuse input parameters
-  
-  It's possible to reuse one or more existing input parameters as values inside
-parameters' `choices` queries, for example:
-  
-  ```sql
-  --input: string firstLetter = "F"
-  --input: string shipCountry = "France" {choices: Query("SELECT DISTINCT shipCountry FROM Orders WHERE shipCountry LIKE @firstLetter || '%')}
-  SELECT * FROM Orders WHERE (shipCountry = @shipCountry)
-  ```
-  
+   --input: string  <patternName> = <defaultValue> {pattern: <columnType>}
+   ```
+
+   In the dependent query, use the reference `@<patternName>(columnName)` to
+   specify a pattern.
+
+  Example:
+
+   ```sql
+   --input: string freightValue = 10.0 {pattern: double}
+  select * from Orders where @freightValue(freight)
+   ```
+
+   Learn more about parameter patterns from this video: [Parameterized database
+   queries](https://www.youtube.com/watch?v=sSJp5CXcYKQ).
+
+* Use lists as inputs. Use this syntax:
+
+    ```sql
+   --input: list<[listElementsType]> <parameterName>
+   ```
+
+   Inside the SQL query before `@<parameterName>`, use `= ANY` operator: `=
+   ANY(@<parameter name>)`. As another option, you can use an operator with an
+   alternative selection of the comparison type, such as `>= ANY` or `< ANY`.
+
+  Example:
+
+   ```sql
+   --input: list<string> countries
+  select * from Customers where country = ANY(@countries)
+   ```
+
+  Learn more about using the lists feature from this video: [Lists in
+   parameterized queries](https://www.youtube.com/watch?v=meRAEF7ogtw).
+
+* Define choices and suggestions for a parameter value. Options for supported
+  types are described in the [Scripting](../compute/scripting.md) section.
+
+   | Option        | Description                                                                       |
+   |---------------|-----------------------------------------------------------------------------------|
+   | `choices`     | A comma-separated list of values, a name of the query, or the actual SQL query    |
+   | `suggestions` | Name of the query to be called to generate suggestion as the user types the value |
+
+  Examples:
+
+   ```sql
+   --input: string shipCountry = "France" {choices: ['France', 'Italy', 'Germany']}
+   --input: string shipCountry = "France" {choices: Query("SELECT DISTINCT shipCountry FROM Orders")}
+   --input: string shipCountry = "France" {choices: Demo:northwind:countries}
+   --input: string shipCountry = "France" {suggestions: Demo:northwind:countries}
+   ```
+
+* Reuse input parameters. It's possible to reuse one or more existing input
+  parameters as values inside parameters' `choices` queries, for example:
+
+   ```sql
+   --input: string firstLetter = "F"
+   --input: string shipCountry = "France" {choices: Query("SELECT DISTINCT shipCountry FROM Orders WHERE shipCountry LIKE @firstLetter || '%')}
+   SELECT * FROM Orders WHERE (shipCountry = @shipCountry)
+   ```
+
   This is handy for queries with hierarchical choices, where each following
-parameter depends on the previous.
+  parameter depends on the previous.
 
 #### Output parameters
 
@@ -394,26 +384,9 @@ package, the following query outputs a string of the semantic type `Molecule`:
 --output: string smiles {semType: Molecule}
 ```
 
-#### Example
+#### Use case
 
-The following example is applicable to the database `northwind`. The query
-selects all rows from the table `Orders` where:
-
-* `employeeId` by default equals 5, you can set an integer value.
-* `shipVia` by default equals 3, you can use filtering criteria for an integer
-  parameter.
-* `freight` by default equals 10.0, you can set a value of type `double`.
-* `shipCountry` by default equals "France", you can choose from the given
-  `choices`.
-* `shipCity` by default contains r in its name, you can use filtering criteria
-  for a parameter of type `string`.
-* `freightLess1000` by default is true, you can switch as a boolean value.
-* `requiredDate` by default is 1/1/1995, you can set another date.
-* `orderDate` by default is after 1/1/1995, you can use filtering criteria for a
-  parameter of type `datetime`.
-
-To learn more about filtering criteria for different data types, see [Patterns
-summary](parameterized-queries.md/#patterns-summary).
+The following example is applicable to the database `northwind`.
 
 ```sql
 --name: PostgresqlOrders
@@ -439,10 +412,28 @@ SELECT * FROM Orders WHERE (employeeId = @employeeId)
     AND (requiredDate >= @requiredDate)
 ```
 
+The preceding query selects all rows from the table `Orders` where:
+
+* `employeeId` by default equals 5, you can set an integer value.
+* `shipVia` by default equals 3, you can use filtering criteria for an integer
+  parameter.
+* `freight` by default equals 10.0, you can set a value of type `double`.
+* `shipCountry` by default equals "France", you can choose from the given
+  `choices`.
+* `shipCity` by default contains r in its name, you can use filtering criteria
+  for a parameter of type `string`.
+* `freightLess1000` by default is true, you can switch as a boolean value.
+* `requiredDate` by default is 1/1/1995, you can set another date.
+* `orderDate` by default is after 1/1/1995, you can use filtering criteria for a
+  parameter of type `datetime`.
+
+> Note: To learn more about filtering criteria for different data types, see
+[Patterns summary](parameterized-queries.md/#patterns-summary).
+
 Before executing a parameterized query, Datagrok dynamically generates a UI that
 lets you enter parameters.
 
-GIF
+![Parameterized query example](parameterized-query.gif)
 
 ### Postprocess query results
 
@@ -577,7 +568,7 @@ Any action performed in **Database Manager** is reproducable and can be used in
 automation workflows. For example, you can use data preparation pipeline to
 define jobs for data ingestion, postprocessing, and transformations.
 
-To learn more about automating workflows usung data preparation pipelines, see
+To learn more about automating workflows using data preparation pipelines, see
 [Data preparation pipeline](data-pipeline.md).
 
 ## Resources
