@@ -485,8 +485,7 @@ from the **Database Manager**. You can specify access privileges for each shared
 database connection or query. Once the item is shared, it appears in the
 recipient's **Database Manager**.
 
-To access the query, users must have access privileges to the database
-connection that contains this query.
+To share a query, share a database connection first.
 
 ### Share database connections and queries
 
@@ -517,7 +516,7 @@ To share an item, do the following:
 1. Click **OK** to share. Once shared, the shared item appears in the
    recipient's **Folder Tree**.
 
-GIF
+![Share database connections and queries](sharing-database-connections.gif)
 
 ## Manage shares
 
@@ -526,7 +525,7 @@ and quickly adjust access permissions to database connections and queries, send
 comments to those you're sharing with, and more.
 
 1. First, select the database connection or query.
-1. Then navigate to **Data Explorer** on the left and expand the **Sharing**
+1. Then navigate to **Data Explorer** on the right and expand the **Sharing**
    info panel to see the complete list of users with access and their
    privileges. From here, you can click any user or group to see their profile,
    your conversation history with them, send them a note, and more.
@@ -535,7 +534,7 @@ comments to those you're sharing with, and more.
 
     >Note: The same actions are available from the context menu.
 
-GIF pending changes in the UI
+![Manage shares](manage-shares.gif)
 
 ## Managing database connections and queries
 
