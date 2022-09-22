@@ -10,47 +10,43 @@ following:
 
 | Data Source                                            | Server  | Port    | DB      | Cache Schema | Cache Results | SSL     | Connection String | Login   | Password | Other Parameters                                                             |
 |--------------------------------------------------------|---------|---------|---------|--------------|---------------|---------|-------------------|---------|----------|------------------------------------------------------------------------------|
-| [Access]( connectors/access.md)            |         |         | &check; |              |               |         | &check;           | &check; | &check;  |                                                                              |
-| [Athena]( connectors/athena.md)            | &check; | &check; | &check; |              |               |         | &check;           |         |          | [See the list]( connectors/athena.md)                            |
-| [BigQuery]( connectors/bigquery.md)        |         |         |         |              |               |         | &check;           | &check; | &check;  | [See the list]( connectors/bigquery.md#connection-parameters)    |
-| [Cassandra]( connectors/cassandra.md)      | &check; | &check; | &check; | &check;      | &check;       | &check; | &check;           | &check; | &check;  |                                                                              |
-| [DB2]( connectors/db2.md)                  | &check; | &check; | &check; | &check;      | &check;       | &check; | &check;           | &check; | &check;  |                                                                              |
-| [Denodo]( connectors/denodo.md)            | &check; | &check; | &check; | &check;      | &check;       | &check; | &check;           | &check; | &check;  |                                                                              |
-| [DropBox]( connectors/dropbox.md)          |         |         |         |              |               |         |                   |         | &check;  | [See the list]( connectors/dropbox.md#connection-parameters)     |
-| [Files](../../access/connectors/files.md)              |         |         |         |              |               |         |                   | &check; | &check;  | [See the list]( connectors/files.md#connection-parameters)       |
-| [Firebird]( connectors/firebird.md)        | &check; | &check; | &check; | &check;      | &check;       |         | &check;           | &check; | &check;  |                                                                              |
-| [Git]( connectors/git.md)                  |         |         |         |              |               |         |                   |         |          | [See the list]( connectors/git.md#connection-parameters)         |
-| [Google Cloud]( connectors/googlecloud.md) |         |         |         |              |               |         |                   |         |          | [See the list]( connectors/googlecloud.md#connection-parameters) |
-| [HBase]( connectors/hbase.md)              | &check; | &check; | &check; | &check;      | &check;       | &check; | &check;           | &check; | &check;  |                                                                              |
-| [Hive]( connectors/hive.md)                | &check; | &check; | &check; | &check;      | &check;       | &check; | &check;           | &check; | &check;  |                                                                              |
-| [Hive2]( connectors/hive2.md)              | &check; | &check; | &check; | &check;      | &check;       | &check; | &check;           | &check; | &check;  |                                                                              |
-| [Impala]( connectors/impala.md)            | &check; | &check; | &check; |              |               |         | &check;           | &check; | &check;  | [See the list]( connectors/impala.md#connection-parameters)      |
-| [MariaDB]( connectors/mariadb.md)          | &check; | &check; | &check; | &check;      | &check;       | &check; | &check;           | &check; | &check;  |                                                                              |
-| [MongoDB]( connectors/mongodb.md)          | &check; | &check; | &check; | &check;      | &check;       |         | &check;           | &check; | &check;  |                                                                              |
-| [MS SQL]( connectors/mssql.md)             | &check; | &check; | &check; | &check;      | &check;       | &check; | &check;           | &check; | &check;  |                                                                              |
-| [MySql]( connectors/mysql.md)              | &check; | &check; | &check; | &check;      | &check;       | &check; | &check;           | &check; | &check;  |                                                                              |
-| [Neo4j]( connectors/neo4j.md)              | &check; | &check; | &check; | &check;      | &check;       | &check; | &check;           | &check; | &check;  |                                                                              |
-| [OData]( connectors/odata.md)              |         |         |         |              |               |         |                   |         |          | [See the list]( connectors/odata.md#connection-parameters)       |
-| [Oracle]( connectors/oracle.md)            | &check; | &check; | &check; | &check;      | &check;       | &check; | &check;           | &check; | &check;  |                                                                              |
-| [PostgresNet]( connectors/postgres.md)     | &check; | &check; | &check; | &check;      | &check;       | &check; | &check;           | &check; | &check;  |                                                                              |
-| [PostgreSQL]( connectors/postgres.md)      | &check; |         | &check; |              | &check;       | &check; |                   | &check; | &check;  |                                                                              |
-| [Redshift]( connectors/redshift.md)        | &check; | &check; | &check; | &check;      | &check;       | &check; | &check;           | &check; | &check;  |                                                                              |
-| [S3]( connectors/s3.md)                    |         |         |         |              |               |         |                   |         |          | [See the list]( connectors/s3.md#connection-parameters)          |
-| [Snowflake]( connectors/snowflake.md)      | &check; | &check; | &check; | &check;      | &check;       | &check; | &check;           | &check; | &check;  |                                                                              |
-| [Socrata]( connectors/socrata.md)          |         |         |         |              |               |         |                   |         |          | [See the list]( connectors/socrata.md#connection-parameters)     |
-| [Sparql]( connectors/sparql.md)            |         |         |         |              |               |         |                   |         |          | [See the list]( connectors/sparql.md#connection-parameters)      |
-| [SQLite]( connectors/sqlite.md)            |         |         | &check; |              |               |         | &check;           | &check; | &check;  |                                                                              |
-| [Teradata]( connectors/teradata.md)        | &check; | &check; | &check; | &check;      | &check;       | &check; | &check;           | &check; | &check;  |                                                                              |
-| [Twitter]( connectors/twitter.md)          |         |         |         |              |               |         |                   |         |          | [See the list]( connectors/twitter.md#connection-parameters)     |
-| [Vertica]( connectors/vertica.md)          | &check; | &check; | &check; | &check;      | &check;       | &check; | &check;           | &check; | &check;  |                                                                              |
-| [Virtuoso]( connectors/virtuoso.md)        | &check; | &check; | &check; | &check;      | &check;       | &check; | &check;           | &check; | &check;  |                                                                              |
-| [Web]( connectors/web.md)                  |         |         |         |              |               |         |                   |         |          | [See the list]( connectors/web.md#connection-parameters)         |
+| [Access]( access.md)            |         |         | &check; |              |               |         | &check;           | &check; | &check;  |                                                                              |
+| [Athena]( athena.md)            | &check; | &check; | &check; |              |               |         | &check;           |         |          | [See the list]( athena.md)                            |
+| [BigQuery]( bigquery.md)        |         |         |         |              |               |         | &check;           | &check; | &check;  | [See the list]( bigquery.md#connection-parameters)    |
+| [Cassandra]( cassandra.md)      | &check; | &check; | &check; | &check;      | &check;       | &check; | &check;           | &check; | &check;  |                                                                              |
+| [DB2]( db2.md)                  | &check; | &check; | &check; | &check;      | &check;       | &check; | &check;           | &check; | &check;  |                                                                              |
+| [Denodo]( denodo.md)            | &check; | &check; | &check; | &check;      | &check;       | &check; | &check;           | &check; | &check;  |                                                                              |
+| [DropBox]( dropbox.md)          |         |         |         |              |               |         |                   |         | &check;  | [See the list]( dropbox.md#connection-parameters)     |
+| [Files](files.md)              |         |         |         |              |               |         |                   | &check; | &check;  | [See the list]( files.md#connection-parameters)       |
+| [Firebird]( firebird.md)        | &check; | &check; | &check; | &check;      | &check;       |         | &check;           | &check; | &check;  |                                                                              |
+| [Git]( git.md)                  |         |         |         |              |               |         |                   |         |          | [See the list]( git.md#connection-parameters)         |
+| [Google Cloud]( googlecloud.md) |         |         |         |              |               |         |                   |         |          | [See the list]( googlecloud.md#connection-parameters) |
+| [HBase]( hbase.md)              | &check; | &check; | &check; | &check;      | &check;       | &check; | &check;           | &check; | &check;  |                                                                              |
+| [Hive]( hive.md)                | &check; | &check; | &check; | &check;      | &check;       | &check; | &check;           | &check; | &check;  |                                                                              |
+| [Hive2]( hive2.md)              | &check; | &check; | &check; | &check;      | &check;       | &check; | &check;           | &check; | &check;  |                                                                              |
+| [Impala]( impala.md)            | &check; | &check; | &check; |              |               |         | &check;           | &check; | &check;  | [See the list]( impala.md#connection-parameters)      |
+| [MariaDB]( mariadb.md)          | &check; | &check; | &check; | &check;      | &check;       | &check; | &check;           | &check; | &check;  |                                                                              |
+| [MongoDB]( mongodb.md)          | &check; | &check; | &check; | &check;      | &check;       |         | &check;           | &check; | &check;  |                                                                              |
+| [MS SQL]( mssql.md)             | &check; | &check; | &check; | &check;      | &check;       | &check; | &check;           | &check; | &check;  |                                                                              |
+| [MySql]( mysql.md)              | &check; | &check; | &check; | &check;      | &check;       | &check; | &check;           | &check; | &check;  |                                                                              |
+| [Neo4j]( neo4j.md)              | &check; | &check; | &check; | &check;      | &check;       | &check; | &check;           | &check; | &check;  |                                                                              |
+| [OData]( odata.md)              |         |         |         |              |               |         |                   |         |          | [See the list]( odata.md#connection-parameters)       |
+| [Oracle]( oracle.md)            | &check; | &check; | &check; | &check;      | &check;       | &check; | &check;           | &check; | &check;  |                                                                              |
+| [PostgresNet]( postgres.md)     | &check; | &check; | &check; | &check;      | &check;       | &check; | &check;           | &check; | &check;  |                                                                              |
+| [PostgreSQL]( postgres.md)      | &check; |         | &check; |              | &check;       | &check; |                   | &check; | &check;  |                                                                              |
+| [Redshift]( redshift.md)        | &check; | &check; | &check; | &check;      | &check;       | &check; | &check;           | &check; | &check;  |                                                                              |
+| [S3]( s3.md)                    |         |         |         |              |               |         |                   |         |          | [See the list]( s3.md#connection-parameters)          |
+| [Snowflake]( snowflake.md)      | &check; | &check; | &check; | &check;      | &check;       | &check; | &check;           | &check; | &check;  |                                                                              |
+| [Socrata]( socrata.md)          |         |         |         |              |               |         |                   |         |          | [See the list]( socrata.md#connection-parameters)     |
+| [Sparql]( sparql.md)            |         |         |         |              |               |         |                   |         |          | [See the list]( sparql.md#connection-parameters)      |
+| [SQLite]( sqlite.md)            |         |         | &check; |              |               |         | &check;           | &check; | &check;  |                                                                              |
+| [Teradata]( teradata.md)        | &check; | &check; | &check; | &check;      | &check;       | &check; | &check;           | &check; | &check;  |                                                                              |
+| [Twitter]( twitter.md)          |         |         |         |              |               |         |                   |         |          | [See the list]( twitter.md#connection-parameters)     |
+| [Vertica]( vertica.md)          | &check; | &check; | &check; | &check;      | &check;       | &check; | &check;           | &check; | &check;  |                                                                              |
+| [Virtuoso]( virtuoso.md)        | &check; | &check; | &check; | &check;      | &check;       | &check; | &check;           | &check; | &check;  |                                                                              |
+| [Web]( web.md)                  |         |         |         |              |               |         |                   |         |          | [See the list]( web.md#connection-parameters)         |
 
 See also:
 
-* [Data access](../access.md)
-* [Data connection](../data-connection.md)
-* [Connecting to file shares](../connect-a-file-share.md)
-<!--
 * [Databases](../databases.md)
-* [File shares](../file-shares.md)-->
+* [File shares](../file-shares.md)
