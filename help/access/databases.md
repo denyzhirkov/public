@@ -478,6 +478,8 @@ fill in the parameters.
 When finished, to save the transformation, on the **Menu Ribbon**,  click
 **Save**.
 
+![Transformations](transformations.gif)
+
 ## Sharing database connections and queries
 
 Share database connections and queries with individual users and groups directly
