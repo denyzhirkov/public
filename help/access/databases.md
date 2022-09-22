@@ -150,7 +150,7 @@ follow these steps:
    the drop-down arrow next to the table name or expand the **Actions** info
    panel.
 
-![Available commands](databases-context-menu.gif)
+![Available commands](database-context-menu.gif)
 
 Subject to your permissions, you can choose to:
 
