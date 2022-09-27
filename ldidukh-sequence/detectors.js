@@ -18,13 +18,9 @@ class LdidukhSequencePackageDetectors extends DG.Package {
     //input: column col
     //output: string semType 
     detectNucleotides(col) {
-=
         if (col.type === DG.TYPE.STRING){
-            
             var result =  col.categories.map(this.isDnaNucleotides).filter(Boolean).length;
-    
             if (result == col.categories.length ) return "dna_nucleotide";
-            //if (is_dna_nucleotide == col.categories.length ) return "dna_nucleotide";
             else return null;
         }
     }
