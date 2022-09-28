@@ -8,6 +8,8 @@
 #input: column smiles {type:categorical; semType: Molecule} [Molecules, in SMILES format]
 #input: int neighbors = 15 [Number of neighbours]
 #input: int minClusterSize = 3 [Minimum cluster size]
+#input: bool isCuda = False [is cuda enambled]
+#inpurt: int minSample = 1 [minimum number of sample for the cumlDBSCAN]
 #output: graphics spanningTree
 #output: graphics linkageTree
 #output: graphics chemSpace
@@ -21,6 +23,10 @@ from rdkit import Chem
 from rdkit.Chem import AllChem
 from rdkit.Chem import Draw
 from rdkit.Chem import DataStructs
+
+if isCuda:
+    from cuml.manifold.umap import UMAP as cuUMAP
+    from cuml.cluster import HDBSCAN as cuHDBSCAN
 
 smiles = data[smiles]
 mols = [Chem.MolFromSmiles(mol) for mol in smiles]
@@ -41,9 +47,16 @@ def tanimoto_dist(a, b):
     tc = dotprod / (np.sum(a) + np.sum(b) - dotprod)
     return 1.0 - tc
 
-umap_X = umap.UMAP(n_neighbors=neighbors, min_dist=0.3, metric=tanimoto_dist).fit_transform(X)
-cluster_umap = hdbscan.HDBSCAN(min_cluster_size=minClusterSize, gen_min_span_tree=True)
-cluster_umap.fit(umap_X)
+if isCuda:
+    umap_X = umap.UMAP(n_neighbors=neighbors, min_dist=0.3, metric=tanimoto_dist).fit_transform(X)
+    cluster_umap = hdbscan.HDBSCAN(min_cluster_size=minClusterSize, gen_min_span_tree=True)
+    cluster_umap.fit(umap_X)
+else:
+    umap_X = cuUMAP(n_neighbors=10, min_dist=0.01,  metric=tanimoto_dist).fit_transform(X)
+    cluster_umap = cuHDBSCAN(eps=minClusterSize,  min_cluster_sizeint = minClusterSize, output_type='numpy')
+    cluster_umap.fit(umap_X)
+
+
 
 plt.figure(0)
 cluster_umap.minimum_spanning_tree_.plot(
