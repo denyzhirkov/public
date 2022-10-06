@@ -1,0 +1,33 @@
+{
+	"name": "anna-sequence",
+	"friendlyName": "Anna-sequence",
+	"version": "0.0.1",
+	"description": "",
+	"dependencies": {
+		"datagrok-api": "latest",
+		"cash-dom": "latest",
+		"dayjs": "latest",
+		"@datagrok-libraries/utils": "latest"
+	},
+	"devDependencies": {
+		"webpack": "latest",
+		"webpack-cli": "latest"
+	},
+	"scripts": {
+		"link-all": "",
+		"debug-anna-sequence": "webpack && grok publish",
+		"release-anna-sequence": "webpack && grok publish --release",
+		"build-anna-sequence": "webpack",
+		"build": "webpack",
+		"debug-anna-sequence-dev": "webpack && grok publish dev",
+		"release-anna-sequence-dev": "webpack && grok publish dev --release",
+		"debug-anna-sequence-local": "webpack && grok publish local",
+		"release-anna-sequence-local": "webpack && grok publish local --release"
+	},
+	"canEdit": [
+		"Developers"
+	],
+	"canView": [
+		"All users"
+	]
+}
